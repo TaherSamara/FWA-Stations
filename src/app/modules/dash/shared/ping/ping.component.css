@@ -1,0 +1,75 @@
+.ping-output {
+  max-height: 350px;
+  overflow-y: auto;
+  font-size: 0.875rem;
+  padding: 1rem;
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: #1e1e1e;
+  border-radius: 0;
+  color: #d4d4d4;
+  font-family: "Consolas", "Courier New", Courier, monospace;
+  line-height: 1.6;
+}
+
+.ping-details .row {
+  font-size: 0.9rem;
+}
+
+.badge.fs-5 {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.alert-info {
+  background-color: #e7f3ff;
+  border-color: #b3d9ff;
+  color: #004085;
+}
+
+.card.border-success,
+.card.border-primary,
+.card.border-danger,
+.card.border-warning,
+.card.border-dark {
+  border-width: 2px;
+}
+
+.card-body i.fe {
+  display: block;
+}
+
+.ping-output::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.ping-output::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+.ping-output::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.ping-output::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+/* Packet Stats Cards */
+.card.border-primary .card-body,
+.card.border-success .card-body,
+.card.border-danger .card-body,
+.card.border-warning .card-body {
+  transition: all 0.3s ease;
+}
+
+.card.border-primary:hover,
+.card.border-success:hover,
+.card.border-danger:hover,
+.card.border-warning:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}

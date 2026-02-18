@@ -1,0 +1,119 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Override primary color with green */
+:root {
+  --bs-primary: rgb(118, 188, 33);
+  --bs-primary-rgb: 118, 188, 33;
+  --bs-warning: rgb(118, 188, 33);
+  --bs-warning-rgb: 118, 188, 33;
+}
+
+.btn-primary {
+  background-color: rgb(118, 188, 33) !important;
+  border-color: rgb(118, 188, 33) !important;
+}
+
+.btn-primary:hover {
+  background-color: rgb(98, 168, 13) !important;
+  border-color: rgb(98, 168, 13) !important;
+}
+
+.btn-warning {
+  background-color: rgb(118, 188, 33) !important;
+  border-color: rgb(118, 188, 33) !important;
+}
+
+.btn-warning:hover {
+  background-color: rgb(98, 168, 13) !important;
+  border-color: rgb(98, 168, 13) !important;
+}
+
+.bg-primary {
+  background-color: rgb(118, 188, 33) !important;
+}
+
+.bg-warning {
+  background-color: rgb(118, 188, 33) !important;
+}
+
+.text-primary {
+  color: rgb(118, 188, 33) !important;
+}
+
+.text-warning {
+  color: rgb(118, 188, 33) !important;
+}
+
+.navbar-dark {
+  background-color: rgb(118, 188, 33) !important;
+}
+
+.page-item {
+  cursor: pointer;
+}
+
+.header-title,
+.nav-tabs .nav-overflow {
+  white-space: nowrap;
+}
+
+.sidebar-menu {
+  color: #00000080;
+  padding: 12px;
+  font-size: 20px;
+  border-radius: 50%;
+}
+
+.sidebar-menu:hover {
+  cursor: pointer;
+  color: #000 !important;
+  transition: background-color 0.5s ease;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.black-menu {
+  color: #00000080;
+  padding: 7px;
+  font-size: 20px;
+  border-radius: 50%;
+}
+
+.black-menu:hover {
+  cursor: pointer;
+  color: #000;
+  transition: background-color 0.5s ease;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.dropdown-menu {
+  padding: 8px;
+  border-radius: 0.5rem;
+  border: none;
+  width: 220px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1050 !important;
+}
+
+.dropdown-item {
+  border-radius: 6px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  background-color: rgba(118, 188, 33, 0.2);
+  border-radius: 6px;
+}
+
+.fe-search {
+  margin-bottom: 2px;
+}

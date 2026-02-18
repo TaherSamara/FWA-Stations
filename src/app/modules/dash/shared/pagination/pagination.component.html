@@ -1,0 +1,23 @@
+<pagination-template #p="paginationApi" *ngIf="!(isLoading$ | async) && totalRecords != 0 && totalRecords > size">
+    <ul class="pagination m-3">
+        <li class="page-item">
+            <button type="button" title="prev" class="page-link" [class.disabled]="p.isFirstPage() || disabled"
+                (click)="pageChange.emit(p.getCurrent() - 1)" style="padding: 0.4rem 0.7rem;">
+                <i class="fe fe-chevrons-left"></i>
+            </button>
+        </li>
+        <li class="page-item" *ngFor="let page of p.pages">
+            <button type="button" title="x" class="page-link" (click)="p.setCurrent(page.value)"
+                [ngClass]="{'text-bg-primary disabled':p.getCurrent() === page.value}"
+                (click)="pageChange.emit(page.value)" [disabled]="disabled">
+                {{ page.label }}
+            </button>
+        </li>
+        <li class="page-item">
+            <button type="button" title="next" class="page-link" [class.disabled]="p.isLastPage() || disabled"
+                (click)="pageChange.emit(p.getCurrent() + 1)" style="padding: 0.4rem 0.7rem;">
+                <i class="fe fe-chevrons-right"></i>
+            </button>
+        </li>
+    </ul>
+</pagination-template>

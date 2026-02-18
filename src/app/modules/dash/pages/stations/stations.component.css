@@ -1,0 +1,107 @@
+.station-card {
+  transition: all 0.3s ease;
+  border: 1px solid #e3e6f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.station-card:hover {
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important;
+  border-color: #76bc21;
+  transform: translateY(-4px);
+}
+
+.station-card .card-body {
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.station-card:hover .card-body {
+  background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
+}
+
+.station-card .station-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f7ff;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.station-card:hover .station-icon {
+  background: #76bc21;
+  transform: scale(1.1);
+}
+
+.station-card:hover .station-icon i {
+  color: white !important;
+}
+
+.station-card .card-title {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  word-break: break-word;
+}
+
+.station-card:hover .card-title {
+  color: #76bc21;
+}
+
+.station-card .card-footer {
+  border-top: 1px solid #e3e6f0;
+  background: white;
+}
+
+.station-card .btn {
+  border-radius: 6px;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.station-card .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.station-card .btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.station-card .btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0b5ed7;
+}
+
+.station-card .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.station-card .btn-secondary:hover {
+  background-color: #5c636a;
+  border-color: #5c636a;
+}
+
+.station-card .btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.station-card .btn-danger:hover {
+  background-color: #bb2d3b;
+  border-color: #bb2d3b;
+}
+
+/* Button layout */
+.flex-grow-2 {
+  flex-grow: 2 !important;
+}

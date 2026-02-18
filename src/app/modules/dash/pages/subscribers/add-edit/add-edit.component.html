@@ -1,0 +1,147 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ subscriber ? 'Edit Subscriber' : 'Add New Subscriber' }}</h4>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+    <form [formGroup]="form">
+        <div class="row">
+            <!-- Basic Information -->
+            <div class="col-12 mb-3">
+                <h6 class="text-muted border-bottom pb-2">Basic Information</h6>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="Name" placeholder="Enter subscriber name"
+                    [class.is-invalid]="submitted && f.Name.errors">
+                <div class="invalid-feedback" *ngIf="submitted && f.Name.errors?.required">
+                    Name is required
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Station <span class="text-danger">*</span></label>
+                <select class="form-select" formControlName="StationId"
+                    [class.is-invalid]="submitted && f.StationId.errors">
+                    <option value="">Select Station</option>
+                    <option *ngFor="let station of stations" [value]="station.id">{{ station.name }}</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="submitted && f.StationId.errors?.required">
+                    Station is required
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Service Type <span class="text-danger">*</span></label>
+                <select class="form-select" formControlName="ServiceType"
+                    [class.is-invalid]="submitted && f.ServiceType.errors">
+                    <option [value]="0">Type 0</option>
+                    <option [value]="1">Type 1</option>
+                    <option [value]="2">Type 2</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="submitted && f.ServiceType.errors?.required">
+                    Service type is required
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Line Code</label>
+                <input type="text" class="form-control" formControlName="LineCode" placeholder="Enter line code">
+            </div>
+
+            <!-- Network Information -->
+            <div class="col-12 mb-3 mt-3">
+                <h6 class="text-muted border-bottom pb-2">Network Information</h6>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Unit Type</label>
+                <input type="text" class="form-control" formControlName="UnitType" placeholder="e.g. ONT, CPE">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Unit Direction</label>
+                <input type="text" class="form-control" formControlName="UnitDirection"
+                    placeholder="e.g. Upstream, Downstream">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Link MAC Address</label>
+                <input type="text" class="form-control" formControlName="LinkMacAddress"
+                    placeholder="00:00:00:00:00:00">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Management IP</label>
+                <input type="text" class="form-control" formControlName="ManagementIp" placeholder="192.168.1.1">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Management VLAN</label>
+                <input type="text" class="form-control" formControlName="ManagementVlan" placeholder="e.g. 100">
+            </div>
+
+            <!-- Mikrotik Information -->
+            <div class="col-12 mb-3 mt-3">
+                <h6 class="text-muted border-bottom pb-2">Mikrotik Information</h6>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Mikrotik ID</label>
+                <input type="text" class="form-control" formControlName="MikrotikId" placeholder="Enter Mikrotik ID">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Mikrotik MAC Address</label>
+                <input type="text" class="form-control" formControlName="MikrotikMacAddress"
+                    placeholder="00:00:00:00:00:00">
+            </div>
+
+            <!-- SAS & ODF Information -->
+            <div class="col-12 mb-3 mt-3">
+                <h6 class="text-muted border-bottom pb-2">SAS & ODF Information</h6>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">SAS Name</label>
+                <input type="text" class="form-control" formControlName="SasName" placeholder="Enter SAS name">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">SAS Port</label>
+                <input type="text" class="form-control" formControlName="SasPort" placeholder="e.g. 1, 2, 3">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">ODF Name</label>
+                <input type="text" class="form-control" formControlName="OdfName" placeholder="Enter ODF name">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">ODF Port</label>
+                <input type="text" class="form-control" formControlName="OdfPort" placeholder="e.g. 1, 2, 3">
+            </div>
+
+            <!-- Notes -->
+            <div class="col-12 mb-3 mt-3">
+                <label class="form-label">Notes</label>
+                <textarea class="form-control" formControlName="Notes" rows="3"
+                    placeholder="Enter any additional notes..."></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-3"></i>Cancel
+    </button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="submit()"
+        [disabled]="(httpService.getLoading('addEditAction') | async)">
+        <i class="fe fe-check me-2" *ngIf="!(httpService.getLoading('addEditAction') | async)"></i>
+        <span class="spinner-border spinner-border-sm me-2"
+            *ngIf="(httpService.getLoading('addEditAction') | async)"></span>
+        <span>{{ subscriber ? 'Update' : 'Add' }}</span>
+    </button>
+</div>

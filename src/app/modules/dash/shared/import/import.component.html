@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h4 class="modal-title">Import Subscribers from Excel</h4>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+    <div class="mb-3">
+        <label class="form-label">Select Excel File <span class="text-danger">*</span></label>
+        <input type="file" class="form-control" accept=".xlsx,.xls" (change)="onFileSelected($event)"
+            [class.is-invalid]="submitted && !selectedFile">
+        <div class="invalid-feedback" *ngIf="submitted && !selectedFile">
+            Please select an Excel file
+        </div>
+        <small class="text-muted">Supported formats: .xlsx, .xls</small>
+    </div>
+
+    <div class="alert alert-info m-0" *ngIf="selectedFile">
+        <i class="fe fe-file me-3"></i>
+        <strong>Selected file:</strong> {{ selectedFile.name }}
+    </div>
+</div>
+
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-3"></i>Cancel
+    </button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="submit()"
+        [disabled]="(httpService.getLoading('importAction') | async)">
+        <i class="fe fe-upload me-2" *ngIf="!(httpService.getLoading('importAction') | async)"></i>
+        <span class="spinner-border spinner-border-sm me-2"
+            *ngIf="(httpService.getLoading('importAction') | async)"></span>
+        <span>Import</span>
+    </button>
+</div>

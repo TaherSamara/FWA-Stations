@@ -1,0 +1,128 @@
+<div class="modal-header">
+    <h5 class="modal-title mb-0">
+        <i class="fe fe-activity me-3"></i>Ping Result
+    </h5>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+    <!-- Loading State -->
+    <div *ngIf="isPinging" class="text-center py-5">
+        <div class="spinner-border text-primary mb-2" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-muted mb-0 small">Pinging {{ ip }}...</p>
+    </div>
+
+    <!-- Ping Result -->
+    <div *ngIf="!isPinging && pingResult">
+        <div *ngIf="pingResult.ping">
+            <!-- Status Badge -->
+            <div class="mb-3">
+                <span class="badge px-3 py-2"
+                    [ngClass]="pingResult.ping.status === 'Pingable' || pingResult.ping.status === 'Reachable' ? 'bg-success' : 'bg-danger'">
+                    <i class="fe me-1"
+                        [ngClass]="pingResult.ping.status === 'Pingable' || pingResult.ping.status === 'Reachable' ? 'fe-check-circle' : 'fe-x-circle'"></i>
+                    {{ pingResult.ping.status }}
+                </span>
+                <span class="badge bg-secondary ms-2" *ngIf="pingResult.ip">
+                    <i class="fe fe-globe me-1"></i>{{ pingResult.ip }}
+                </span>
+            </div>
+
+            <!-- Packet Statistics -->
+            <div class="mb-3" *ngIf="packetStats">
+                <label class="form-label fw-bold mb-2">
+                    <i class="fe fe-package me-1"></i>Packet Statistics
+                </label>
+                <div class="d-flex align-items-center justify-content-between p-3 border rounded bg-light">
+                    <div class="text-center flex-fill">
+                        <div class="fw-bold text-primary fs-5">{{ packetStats.sent }}</div>
+                        <small class="text-muted">Sent</small>
+                    </div>
+                    <div class="text-center flex-fill border-start border-end">
+                        <div class="fw-bold text-success fs-5">{{ packetStats.received }}</div>
+                        <small class="text-muted">Received</small>
+                    </div>
+                    <div class="text-center flex-fill">
+                        <div class="fw-bold text-danger fs-5">{{ packetStats.lost }}</div>
+                        <small class="text-muted">Lost ({{ packetStats.lossPercent }}%)</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response Time -->
+            <div class="mb-3" *ngIf="pingResult.ping.latency_ms || pingResult.ping.min_avg_max_ms">
+                <label class="form-label fw-bold mb-2">
+                    <i class="fe fe-clock me-1"></i>Response Time
+                </label>
+                <div class="d-flex align-items-center justify-content-between p-3 border rounded bg-light">
+                    <div class="text-center flex-fill">
+                        <div class="fw-bold text-success fs-5">{{ pingResult.ping.latency_ms?.minimum ||
+                            pingResult.ping.min_avg_max_ms?.split('/')[0] }}</div>
+                        <small class="text-muted">Min (ms)</small>
+                    </div>
+                    <div class="text-center flex-fill border-start border-end">
+                        <div class="fw-bold text-primary fs-5">{{ pingResult.ping.latency_ms?.average ||
+                            pingResult.ping.min_avg_max_ms?.split('/')[1] }}</div>
+                        <small class="text-muted">Avg (ms)</small>
+                    </div>
+                    <div class="text-center flex-fill">
+                        <div class="fw-bold text-danger fs-5">{{ pingResult.ping.latency_ms?.maximum ||
+                            pingResult.ping.min_avg_max_ms?.split('/')[2] }}</div>
+                        <small class="text-muted">Max (ms)</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TTL & Execution Time -->
+            <div class="mb-3" *ngIf="pingResult.ping?.ttl || pingResult.execution_time_ms">
+                <div class="d-flex gap-2 flex-wrap">
+                    <span class="badge bg-secondary px-3 py-2" *ngIf="pingResult.ping?.ttl">
+                        <i class="fe fe-layers me-3"></i>TTL: {{ pingResult.ping.ttl }}
+                    </span>
+                    <span class="badge bg-info px-3 py-2" *ngIf="pingResult.execution_time_ms">
+                        <i class="fe fe-clock me-3"></i>Execution: {{ pingResult.execution_time_ms }}ms
+                    </span>
+                    <span class="badge bg-dark px-3 py-2" *ngIf="pingResult.exit_code !== undefined">
+                        <i class="fe fe-check-square me-3"></i>Exit Code: {{ pingResult.exit_code }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- No Response -->
+            <div class="alert alert-danger py-2 mb-3"
+                *ngIf="!pingResult.ping.latency_ms && !pingResult.ping.min_avg_max_ms && (pingResult.ping.status !== 'Pingable' && pingResult.ping.status !== 'Reachable')">
+                <i class="fe fe-alert-circle me-3"></i>
+                <strong>No Response:</strong> Target host is unreachable
+            </div>
+
+            <!-- Error Message -->
+            <div class="alert alert-warning py-2 mb-3" *ngIf="pingResult.ping.error">
+                <i class="fe fe-alert-triangle me-3"></i>{{ pingResult.ping.error }}
+            </div>
+
+            <!-- Raw Output -->
+            <div *ngIf="pingResult.ping.raw_output">
+                <label class="form-label fw-bold mb-2">
+                    <i class="fe fe-terminal me-1"></i>Ping Output
+                </label>
+                <div class="border rounded bg-dark text-light p-3">
+                    <pre class="mb-0 font-monospace small"
+                        style="white-space: pre-wrap; word-wrap: break-word;">{{ pingResult.ping.raw_output }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-1"></i>Close
+    </button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="ping()" [disabled]="isPinging">
+        <i class="fe fe-refresh-cw me-1" *ngIf="!isPinging"></i>
+        <span class="spinner-border spinner-border-sm me-1" *ngIf="isPinging"></span>
+        Ping Again
+    </button>
+</div>

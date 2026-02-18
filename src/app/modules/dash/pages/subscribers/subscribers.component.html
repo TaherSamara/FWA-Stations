@@ -1,0 +1,154 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex align-items-center input-group-merge input-group-flush input-group position-relative">
+            <i class="fe fe-search text-muted position-absolute me-3"></i>
+            <input [disabled]="totalCount == 0" [(ngModel)]="searchText" class="form-control m-0 ps-4"
+                placeholder="Type to search..." (ngModelChange)="list(1)">
+        </div>
+        <div class="d-flex gap-2">
+            <div class="d-flex gap-2 align-items-center me-5">
+                <button class="btn btn-sm" [ngClass]="isServiceTypeSelected(10) ? 'btn-success' : 'btn-outline-success'"
+                    (click)="toggleServiceType(10)">
+                    Mobadara ({{ serviceTypeCounts[10] }})
+                </button>
+                <button class="btn btn-sm" [ngClass]="isServiceTypeSelected(20) ? 'btn-success' : 'btn-outline-success'"
+                    (click)="toggleServiceType(20)">
+                    PTP ({{ serviceTypeCounts[20] }})
+                </button>
+                <button class="btn btn-sm" [ngClass]="isServiceTypeSelected(30) ? 'btn-success' : 'btn-outline-success'"
+                    (click)="toggleServiceType(30)">
+                    Base Station ({{ serviceTypeCounts[30] }})
+                </button>
+            </div>
+            <button class="btn btn-sm btn-success" (click)="importExcel()"
+                *hasPermission="PermissionCode.IMPORT_SUBSCRIBERS">
+                <i class="fe fe-upload me-3"></i>
+                <span>Import Excel</span>
+            </button>
+            <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_SUBSCRIBER">
+                <i class="fe fe-plus me-3"></i>
+                <span>New Subscriber</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-nowrap card-table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th class="w-10">Name</th>
+                    <th class="w-8">Line Code</th>
+                    <th class="w-10">Link MAC</th>
+                    <th class="w-8">Unit Type</th>
+                    <th class="w-8">Mgmt IP</th>
+                    <th class="w-8">Mikrotik ID</th>
+                    <th class="w-10">Mikrotik MAC</th>
+                    <th class="w-8">ODF Name</th>
+                    <th class="w-6">ODF Port</th>
+                    <th class="w-5">VLAN</th>
+                    <th class="w-8">Created By</th>
+                    <th class="w-8">Updated By</th>
+                    <th class="w-8">Service Type</th>
+                    <th class="w-5">Actions</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="!(httpService.getLoading('subscribersList') | async) && totalRecords > 0">
+                <tr
+                    *ngFor="let subscriber of subscribers | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index">
+                    <td>{{ subscriber?.name || '-' }}</td>
+                    <td>{{ subscriber?.line_code || '-' }}</td>
+                    <td>{{ subscriber?.link_mac_address || '-' }}</td>
+                    <td>{{ subscriber?.unit_type || '-' }}</td>
+                    <td>
+                        <a *ngIf="subscriber?.management_ip" [href]="'http://' + subscriber.management_ip"
+                            target="_blank" class="text-primary text-decoration-none" title="Open in new tab">
+                            {{ subscriber.management_ip }}
+                            <i class="fe fe-external-link ms-1 small"></i>
+                        </a>
+                        <span *ngIf="!subscriber?.management_ip">-</span>
+                    </td>
+                    <td>{{ subscriber?.mikrotik_id || '-' }}</td>
+                    <td>{{ subscriber?.mikrotik_mac_address || '-' }}</td>
+                    <td>{{ subscriber?.odf_name || '-' }}</td>
+                    <td>{{ subscriber?.odf_port || '-' }}</td>
+                    <td>{{ subscriber?.management_vlan || '-' }}</td>
+                    <td>
+                        <div *ngIf="subscriber?.insert_user; else noInsertUser" class="small">
+                            <div class="fw-bold text-primary" [title]="subscriber.insert_user.email">
+                                {{ subscriber.insert_user.full_name }}
+                            </div>
+                            <div class="text-muted" style="font-size: 0.75rem;">
+                                {{ subscriber?.insert_date | date: 'dd/MM/yyyy HH:mm' }}
+                            </div>
+                        </div>
+                        <ng-template #noInsertUser>
+                            <span class="text-muted">-</span>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="subscriber?.update_user; else noUpdateUser" class="small">
+                            <div class="fw-bold text-primary" [title]="subscriber.update_user.email">
+                                {{ subscriber.update_user.full_name }}
+                            </div>
+                            <div class="text-muted" style="font-size: 0.75rem;">
+                                {{ subscriber?.update_date | date: 'dd/MM/yyyy HH:mm' }}
+                            </div>
+                        </div>
+                        <ng-template #noUpdateUser>
+                            <span class="text-muted">-</span>
+                        </ng-template>
+                    </td>
+                    <td>{{ getServiceTypeName(subscriber?.service_type) }}</td>
+                    <td>
+                        <div class="btn-group dropstart">
+                            <span data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fe fe-more-vertical black-menu fs-2"></i>
+                            </span>
+                            <ul class="dropdown-menu">
+                                <li *hasPermission="PermissionCode.EDIT_SUBSCRIBER">
+                                    <a class="dropdown-item" (click)="edit(subscriber)">
+                                        <i class="fe fe-edit me-3"></i>Edit
+                                    </a>
+                                </li>
+                                <li *hasPermission="PermissionCode.VIEW_SUBSCRIBERS">
+                                    <a class="dropdown-item" (click)="pingIP(subscriber)"
+                                        [class.disabled]="!subscriber?.management_ip">
+                                        <i class="fe fe-activity text-success me-3"></i>
+                                        <span [class.text-muted]="!subscriber?.management_ip">Ping</span>
+                                    </a>
+                                </li>
+                                <li *hasPermission="PermissionCode.DELETE_SUBSCRIBER">
+                                    <hr class="m-2">
+                                </li>
+                                <li *hasPermission="PermissionCode.DELETE_SUBSCRIBER">
+                                    <a class="dropdown-item" (click)="delete(subscriber)">
+                                        <i class="fe fe-trash-2 text-danger me-3"></i>
+                                        <span class="text-danger">Delete</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- loading -->
+            <tbody *ngIf="(httpService.getLoading('subscribersList') | async)">
+                <tr *ngFor="let number of [].constructor(+size+1)">
+                    <td style="padding: 19.9px;" *ngFor="let number of [].constructor(+14)">
+                        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+                            [theme]="{width:'70%',height:'23.5px','border-radius':'3px','margin':'0'}"></ngx-skeleton-loader>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- if no results -->
+    <app-no-results [isLoading$]="httpService.getLoading('subscribersList')"
+        [totalRecords]="totalRecords"></app-no-results>
+
+    <!-- pagination -->
+    <app-pagination [isLoading$]="httpService.getLoading('subscribersList')" [totalRecords]="totalRecords" [size]="size"
+        (pageChange)="list($event)"></app-pagination>
+</div>

@@ -1,0 +1,102 @@
+<nav id="sidebar" class="navbar navbar-expand-md navbar-dark px-4">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <img src="/assets/img/menu.svg" />
+    </button>
+    <a class="me-md-3" routerLink="/">
+      <img src="/assets/img/logo.svg" height="40px" />
+    </a>
+    <div class="navbar-user d-md-none">
+      <div class="dropdown">
+        <a id="sidebarIcon" class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <div class="avatar avatar-sm">
+            <img [src]="user.image" class="avatar-img rounded-circle border border-2" />
+          </div>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarIcon">
+          <a (click)="openChangePassword()" class="dropdown-item">Change Password</a>
+          <a (click)="logout()" class="dropdown-item">Logout</a>
+        </div>
+      </div>
+    </div>
+    <div class="collapse navbar-collapse me-auto" id="nav">
+      <!-- Search Bar Mobile -->
+      <div class="d-md-none mb-3 mt-2">
+        <div class="position-relative">
+          <input type="text" class="form-control form-control-sm search-input" placeholder="Search..."
+            [(ngModel)]="searchQuery" (input)="onSearchInput($event)" (keyup)="onSearchKeyup($event)" />
+          <i class="fe fe-search search-icon"></i>
+        </div>
+      </div>
+
+      <ul class="navbar-nav">
+        <li class="nav-item" *hasPermission="PermissionCode.VIEW_USERS">
+          <a class="nav-link" routerLinkActive="active" routerLink="/users">
+            <i class="fe fe-users"></i>
+            <span>Users</span>
+          </a>
+        </li>
+        <li class="nav-item" *hasPermission="PermissionCode.VIEW_STATIONS">
+          <a class="nav-link" routerLinkActive="active" routerLink="/stations">
+            <i class="fe fe-server"></i>
+            <span>Stations</span>
+          </a>
+        </li>
+        <li class="nav-item" *hasPermission="PermissionCode.VIEW_SUBSCRIBERS">
+          <a class="nav-link" routerLinkActive="active" routerLink="/subscribers">
+            <i class="fe fe-radio"></i>
+            <span>Subscribers</span>
+          </a>
+        </li>
+        <li class="nav-item" *hasPermission="[PermissionCode.VIEW_ALL_DEVICES, PermissionCode.VIEW_MY_DEVICES]">
+          <a class="nav-link" routerLinkActive="active" routerLink="/warehouse">
+            <i class="fe fe-package"></i>
+            <span>Warehouse</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="navbar-search mx-3 d-none d-md-flex">
+      <div class="position-relative">
+        <input type="text" class="form-control search-input" placeholder="Search..." [(ngModel)]="searchQuery"
+          (input)="onSearchInput($event)" (keyup)="onSearchKeyup($event)" />
+        <i class="fe fe-search search-icon"></i>
+      </div>
+    </div>
+
+    <div class="navbar-user d-none d-md-flex">
+      <div class="avatar avatar-sm">
+        <img [src]="user.image" class="avatar-img rounded-circle border border-2" />
+      </div>
+      <span class="text-white fs-5 ms-3 me-4">
+        WELCOME,
+        <div class="fw-bold">{{ (user.first_name + ' ' + user.last_name) | uppercase }}</div>
+      </span>
+      <span class="row border-start" role="button" (click)="openChangePassword()" title="Change Password">
+        <i class="fe fe-lock text-white fs-3"></i>
+      </span>
+      <span class="row border-start ms-3" role="button" (click)="openSm(content)" title="Logout">
+        <i class="fe fe-log-out text-white fs-3"></i></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Logout modal -->
+<ng-template #content let-modal>
+  <div class="modal-body text-center">
+    <div class="text-center py-3">
+      <i class="fe fe-log-out fs-1"></i>
+      <h1 class="fw-bold mt-3">Are you sure you want to Logout?</h1>
+    </div>
+    <button class="btn btn-sm btn-light me-3" (click)="modal.close()">
+      Cancel
+    </button>
+    <button class="btn btn-sm btn-danger" (click)="modal.close()" (click)="logout()">
+      Logout
+    </button>
+  </div>
+</ng-template>

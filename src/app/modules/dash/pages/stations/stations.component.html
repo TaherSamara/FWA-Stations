@@ -1,0 +1,88 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex align-items-center input-group-merge input-group-flush input-group position-relative">
+            <i class="fe fe-search text-muted position-absolute me-3"></i>
+            <input [disabled]="totalCount == 0" [(ngModel)]="searchText" class="form-control m-0 ps-4"
+                placeholder="Type to search..." (ngModelChange)="list(1)">
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-success" (click)="importExcel()" *hasPermission="PermissionCode.ADD_STATION">
+                <i class="fe fe-upload me-3"></i>
+                <span>Import Excel</span>
+            </button>
+            <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_STATION">
+                <i class="fe fe-plus me-3"></i>
+                <span>New Station</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <!-- Cards View -->
+        <div class="row g-3" *ngIf="!(httpService.getLoading('stationsList') | async) && totalRecords > 0">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
+                *ngFor="let station of stations | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index">
+                <div class="card station-card m-0">
+                    <div class="card-body text-center p-3" (click)="viewSubscribers(station)" style="cursor: pointer;">
+                        <div class="mb-3">
+                            <div class="station-icon mb-3">
+                                <i class="fe fe-radio fs-1 text-primary"></i>
+                            </div>
+                            <h4 class="card-title mb-0 fw-bold">{{ station?.name || '-' }}</h4>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top p-3" (click)="$event.stopPropagation()">
+                        <div class="d-flex gap-3">
+                            <button class="btn btn-sm btn-primary flex-fill flex-grow-2"
+                                (click)="viewSubscribers(station)" title="View Subscribers"
+                                *hasPermission="PermissionCode.VIEW_SUBSCRIBERS">
+                                <i class="fe fe-users me-1"></i>
+                                <small>View Station</small>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary flex-fill" (click)="edit(station)"
+                                title="Edit" *hasPermission="PermissionCode.EDIT_STATION">
+                                <i class="fe fe-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger flex-fill" (click)="delete(station)"
+                                title="Delete" *hasPermission="PermissionCode.DELETE_STATION">
+                                <i class="fe fe-trash-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- loading -->
+        <div class="row g-3" *ngIf="(httpService.getLoading('stationsList') | async)">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let number of [].constructor(+size)">
+                <div class="card station-card m-0">
+                    <div class="card-body text-center p-3">
+                        <div class="mb-3">
+                            <div class="station-icon mb-3">
+                                <ngx-skeleton-loader appearance="circle" animation="progress-dark"
+                                    [theme]="{width:'60px',height:'60px','border-radius':'50%','margin':'0 auto'}"></ngx-skeleton-loader>
+                            </div>
+                            <ngx-skeleton-loader appearance="line" animation="progress-dark"
+                                [theme]="{width:'80%',height:'20px','border-radius':'3px','margin':'0 auto'}"></ngx-skeleton-loader>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top p-3">
+                        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+                            [theme]="{width:'100%',height:'32px','border-radius':'3px','margin':'0'}"></ngx-skeleton-loader>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- if no results -->
+    <app-no-results [isLoading$]="httpService.getLoading('stationsList')"
+        [totalRecords]="totalRecords"></app-no-results>
+
+    <!-- pagination -->
+    <app-pagination [isLoading$]="httpService.getLoading('stationsList')" [totalRecords]="totalRecords" [size]="size"
+        (pageChange)="list($event)"></app-pagination>
+</div>
+<br>
+<br>

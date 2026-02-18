@@ -1,0 +1,77 @@
+.search-results-container {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.result-section {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.section-header {
+  padding-bottom: 8px;
+}
+
+.result-item {
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.result-item:hover {
+  background: #f8f9fa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
+}
+
+.bg-primary-soft {
+  background-color: rgba(54, 97, 255, 0.1);
+}
+
+.bg-info-soft {
+  background-color: rgba(0, 209, 255, 0.1);
+}
+
+.bg-success-soft {
+  background-color: rgba(0, 209, 86, 0.1);
+}
+
+.bg-warning-soft {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar styling */
+.search-results-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-results-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.search-results-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.search-results-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

@@ -1,0 +1,131 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex align-items-center input-group-merge input-group-flush input-group position-relative">
+            <i class="fe fe-search text-muted position-absolute me-3"></i>
+            <input [disabled]="totalCount == 0" [(ngModel)]="searchText" class="form-control m-0 ps-4"
+                placeholder="Type to search..." (ngModelChange)="list(1)">
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-success" (click)="importExcel()"
+                *hasPermission="PermissionCode.IMPORT_DEVICES">
+                <i class="fe fe-upload me-3"></i>
+                <span>Import Excel</span>
+            </button>
+            <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_DEVICE">
+                <i class="fe fe-plus me-3"></i>
+                <span>New Device</span>
+            </button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-sm table-nowrap card-table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th class="w-5">#No</th>
+                    <th class="w-10">Device Type</th>
+                    <th class="w-10">Serial Number</th>
+                    <th class="w-10">Source Location</th>
+                    <th class="w-10">Destination</th>
+                    <th class="w-10">Line Code</th>
+                    <th class="w-10">Notes</th>
+                    <th class="w-12">Created By</th>
+                    <th class="w-12">Updated By</th>
+                    <th class="w-5">Actions</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="!(httpService.getLoading('warehouseList') | async) && totalRecords > 0">
+                <tr
+                    *ngFor="let device of devices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index">
+                    <td>#{{ i + 1 }}</td>
+                    <td>{{ device?.device_type || '-' }}</td>
+                    <td>{{ device?.serial_number || '-' }}</td>
+                    <td>{{ device?.source_location || '-' }}</td>
+                    <td>{{ device?.assigned_user?.full_name || '-' }}</td>
+                    <td>{{ device?.customer_line_code || '-' }}</td>
+                    <td>
+                        <span *ngIf="device?.notes && device.notes.length > 20">
+                            {{ device.notes.substring(0, 20) }}...
+                        </span>
+                        <span *ngIf="device?.notes && device.notes.length <= 20">
+                            {{ device.notes }}
+                        </span>
+                        <span *ngIf="!device?.notes">-</span>
+                    </td>
+                    <td>
+                        <div *ngIf="device?.insert_user; else noInsertUser" class="small">
+                            <div class="fw-bold text-primary" [title]="device.insert_user.email">
+                                {{ device.insert_user.full_name }}
+                            </div>
+                            <div class="text-muted" style="font-size: 0.75rem;">
+                                {{ device?.insert_date | date: 'dd/MM/yyyy HH:mm' }}
+                            </div>
+                        </div>
+                        <ng-template #noInsertUser>
+                            <span class="text-muted">-</span>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div *ngIf="device?.update_user; else noUpdateUser" class="small">
+                            <div class="fw-bold text-primary" [title]="device.update_user.email">
+                                {{ device.update_user.full_name }}
+                            </div>
+                            <div class="text-muted" style="font-size: 0.75rem;">
+                                {{ device?.update_date | date: 'dd/MM/yyyy HH:mm' }}
+                            </div>
+                        </div>
+                        <ng-template #noUpdateUser>
+                            <span class="text-muted">-</span>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <div class="btn-group dropstart">
+                            <span data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fe fe-more-vertical black-menu fs-2"></i>
+                            </span>
+                            <ul class="dropdown-menu">
+                                <li *hasPermission="PermissionCode.UPDATE_CUSTOMER_LINE_CODE">
+                                    <a class="dropdown-item" (click)="updateLineCode(device)">
+                                        <i class="fe fe-edit-2 text-info me-3"></i>
+                                        <span>Update Line Code</span>
+                                    </a>
+                                </li>
+                                <li *hasPermission="PermissionCode.EDIT_DEVICE">
+                                    <a class="dropdown-item" (click)="edit(device)">
+                                        <i class="fe fe-edit me-3"></i>Edit
+                                    </a>
+                                </li>
+                                <li *hasPermission="PermissionCode.DELETE_DEVICE">
+                                    <hr class="m-2">
+                                </li>
+                                <li *hasPermission="PermissionCode.DELETE_DEVICE">
+                                    <a class="dropdown-item" (click)="delete(device)">
+                                        <i class="fe fe-trash-2 text-danger me-3"></i>
+                                        <span class="text-danger">Delete</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- loading -->
+            <tbody *ngIf="(httpService.getLoading('warehouseList') | async)">
+                <tr *ngFor="let number of [].constructor(+size+1)">
+                    <td style="padding: 19.9px;" *ngFor="let number of [].constructor(+10)">
+                        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+                            [theme]="{width:'40%',height:'23.5px','border-radius':'3px','margin':'0'}"></ngx-skeleton-loader>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- if no results -->
+    <app-no-results [isLoading$]="httpService.getLoading('warehouseList')"
+        [totalRecords]="totalRecords"></app-no-results>
+
+    <!-- pagination -->
+    <app-pagination [isLoading$]="httpService.getLoading('warehouseList')" [totalRecords]="totalRecords" [size]="size"
+        (pageChange)="list($event)"></app-pagination>
+</div>

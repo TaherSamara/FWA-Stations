@@ -1,0 +1,117 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ user ? 'Edit User' : 'Add New User' }}</h4>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="form">
+        <!-- Top Section: User Information Fields -->
+        <div class="user-info-section mb-4">
+            <h5 class="mb-3 text-primary">
+                <i class="fe fe-user me-3"></i>User Information
+            </h5>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">First Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="FirstName" placeholder="Enter first name"
+                        [class.is-invalid]="submitted && f.FirstName.errors">
+                    <div class="invalid-feedback" *ngIf="submitted && f.FirstName.errors?.required">
+                        First name is required
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="LastName" placeholder="Enter last name"
+                        [class.is-invalid]="submitted && f.LastName.errors">
+                    <div class="invalid-feedback" *ngIf="submitted && f.LastName.errors?.required">
+                        Last name is required
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" formControlName="Email" placeholder="example@email.com"
+                        [class.is-invalid]="submitted && f.Email.errors">
+                    <div class="invalid-feedback" *ngIf="submitted && f.Email.errors?.required">
+                        Email is required
+                    </div>
+                    <div class="invalid-feedback" *ngIf="submitted && f.Email.errors?.email">
+                        Invalid email format
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Profile Image</label>
+                    <input type="file" class="form-control" accept="image/*" (change)="onImageSelected($event)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Permissions -->
+        <div class="permissions-section">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0 text-primary">
+                    <i class="fe fe-shield me-3"></i>Permissions
+                </h5>
+                <span class="badge bg-primary">{{ selectedPermissions.length }} selected</span>
+            </div>
+
+            <div class="permissions-container">
+                <div class="row g-3">
+                    <div class="col-12 col-md-6" *ngFor="let category of categoryKeys">
+                        <div class="permission-category">
+                            <div class="category-header mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0 text-primary fw-bold">
+                                        <i class="fe fe-layers me-3"></i>
+                                        {{ permissionsService.getCategoryName(category) }}
+                                    </h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input category-checkbox" type="checkbox"
+                                            [checked]="isCategorySelected(category)"
+                                            (change)="onCategoryChange(category, $event)" [id]="'category-' + category">
+                                        <label class="form-check-label" [for]="'category-' + category">
+                                            <small>Select All</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="permission-items">
+                                <div class="row">
+                                    <div class="col-md-6 mb-2"
+                                        *ngFor="let permission of permissionsByCategory[category]">
+                                        <div class="form-check">
+                                            <input class="form-check-input m-0" type="checkbox"
+                                                [checked]="isPermissionSelected(permission.id)"
+                                                (change)="onPermissionChange(permission.id, $event)"
+                                                [id]="'permission-' + permission.id">
+                                            <label class="form-check-label" [for]="'permission-' + permission.id">
+                                                <span class="permission-name">{{ permission.name }}</span>
+                                                <small class="text-muted d-block" *ngIf="permission.description">{{
+                                                    permission.description }}</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-3"></i>Cancel
+    </button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="submit()"
+        [disabled]="(httpService.getLoading('addEditAction') | async)">
+        <i class="fe fe-check me-2" *ngIf="!(httpService.getLoading('addEditAction') | async)"></i>
+        <span class="spinner-border spinner-border-sm me-2"
+            *ngIf="(httpService.getLoading('addEditAction') | async)"></span>
+        <span>{{ user ? 'Update' : 'Add' }}</span>
+    </button>
+</div>

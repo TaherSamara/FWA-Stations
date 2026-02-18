@@ -1,0 +1,92 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        <span *ngIf="!isFullEdit">Update Customer Line Code</span>
+        <span *ngIf="isFullEdit && device">Edit Device</span>
+        <span *ngIf="isFullEdit && !device">Add New Device</span>
+    </h4>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="form">
+        <div class="row" *ngIf="isFullEdit">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Device Type <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="DeviceType" placeholder="e.g. Router, ONT, CPE"
+                    [class.is-invalid]="submitted && f.DeviceType.errors">
+                <div class="invalid-feedback" *ngIf="submitted && f.DeviceType.errors?.required">
+                    Device type is required
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Serial Number <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="SerialNumber"
+                    placeholder="Enter device serial number" [class.is-invalid]="submitted && f.SerialNumber.errors">
+                <div class="invalid-feedback" *ngIf="submitted && f.SerialNumber.errors?.required">
+                    Serial number is required
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Source Location</label>
+                <input type="text" class="form-control" formControlName="SourceLocation"
+                    placeholder="Enter source location">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Assigned User</label>
+                <select class="form-select" formControlName="AssignedUserId">
+                    <option [value]="null" disabled>-- Select User --</option>
+                    <option *ngFor="let user of users" [value]="user.id">
+                        {{ user.first_name }} {{ user.last_name }} ({{ user.email }})
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-12 mb-3" *ngIf="authService.hasPermission(PermissionCode.UPDATE_CUSTOMER_LINE_CODE)">
+                <label class="form-label">Customer Line Code</label>
+                <input type="text" class="form-control" formControlName="CustomerLineCode"
+                    placeholder="Enter customer line code">
+            </div>
+
+            <div class="col-12 mb-3" *ngIf="authService.hasPermission(PermissionCode.UPDATE_CUSTOMER_LINE_CODE)">
+                <label class="form-label">Notes</label>
+                <textarea class="form-control" formControlName="Notes" rows="3"
+                    placeholder="Enter any additional notes..."></textarea>
+            </div>
+        </div>
+
+        <!-- Update Line Code Only Form -->
+        <div class="row" *ngIf="!isFullEdit">
+            <div class="col-12 mb-3">
+                <label class="form-label">Customer Line Code <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" formControlName="CustomerLineCode"
+                    placeholder="Enter customer line code" [class.is-invalid]="submitted && f.CustomerLineCode.errors">
+                <div class="invalid-feedback" *ngIf="submitted && f.CustomerLineCode.errors?.required">
+                    Customer line code is required
+                </div>
+            </div>
+
+            <div class="col-12 mb-3">
+                <label class="form-label">Notes</label>
+                <textarea class="form-control" formControlName="Notes" rows="3"
+                    placeholder="Enter any additional notes..."></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-3"></i>Cancel
+    </button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="submit()"
+        [disabled]="(httpService.getLoading('addEditAction') | async) || (httpService.getLoading('updateLineCodeAction') | async)">
+        <i class="fe fe-check me-2"
+            *ngIf="!(httpService.getLoading('addEditAction') | async) && !(httpService.getLoading('updateLineCodeAction') | async)"></i>
+        <span class="spinner-border spinner-border-sm me-2"
+            *ngIf="(httpService.getLoading('addEditAction') | async) || (httpService.getLoading('updateLineCodeAction') | async)"></span>
+        <span>{{ isFullEdit ? (device ? 'Update' : 'Add') : 'Update Line Code' }}</span>
+    </button>
+</div>

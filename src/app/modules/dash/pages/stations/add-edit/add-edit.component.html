@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ station ? 'Edit Station' : 'Add New Station' }}</h4>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="form">
+        <div class="mb-3">
+            <label class="form-label">Station Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="Name" placeholder="Enter station name"
+                [class.is-invalid]="submitted && f.Name.errors">
+            <div class="invalid-feedback" *ngIf="submitted && f.Name.errors?.required">
+                Station name is required
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-3"></i>Cancel
+    </button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="submit()"
+        [disabled]="(httpService.getLoading('addEditAction') | async)">
+        <i class="fe fe-check me-2" *ngIf="!(httpService.getLoading('addEditAction') | async)"></i>
+        <span class="spinner-border spinner-border-sm me-2"
+            *ngIf="(httpService.getLoading('addEditAction') | async)"></span>
+        <span>{{ station ? 'Update' : 'Add' }}</span>
+    </button>
+</div>

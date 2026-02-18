@@ -1,0 +1,134 @@
+<div class="modal-header ">
+    <h4 class="modal-title">Search Results</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+    <!-- No Results -->
+    <div *ngIf="!hasResults()" class="text-center py-5">
+        <i class="fe fe-search fs-1 text-muted mb-3 d-block"></i>
+        <h5 class="text-muted">No results found</h5>
+        <p class="text-muted mb-0">Try searching with different keywords</p>
+    </div>
+
+    <!-- Results -->
+    <div *ngIf="hasResults()" class="search-results-container">
+
+        <!-- Users Section -->
+        <div *ngIf="results.users.count > 0" class="result-section">
+            <div class="section-header d-flex align-items-center mb-2">
+                <i class="fe {{ getCategoryIcon('User') }} me-2 text-{{ getCategoryColor('User') }}"></i>
+                <h5 class="mb-0 fw-bold">Users ({{ results.users.count }})</h5>
+            </div>
+            <div class="result-items">
+                <div *ngFor="let item of results.users.items"
+                    class="result-item d-flex align-items-center p-3 mb-2 border rounded cursor-pointer hover-shadow"
+                    (click)="navigateTo(item)">
+                    <div class="result-icon me-3">
+                        <div class="avatar avatar-sm">
+                            <img *ngIf="item.image" [src]="item.image" class="avatar-img rounded-circle"
+                                alt="{{ item.title }}">
+                            <div *ngIf="!item.image"
+                                class="avatar-img rounded-circle bg-{{ getCategoryColor('User') }}-soft d-flex align-items-center justify-content-center">
+                                <i class="fe {{ getCategoryIcon('User') }} text-{{ getCategoryColor('User') }}"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-content flex-grow-1">
+                        <div class="fw-bold">{{ item.title }}</div>
+                        <small class="text-muted">{{ item.subtitle }}</small>
+                    </div>
+                    <i class="fe fe-chevron-right text-muted"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stations Section -->
+        <div *ngIf="results.stations.count > 0" class="result-section">
+            <div class="section-header d-flex align-items-center mb-2">
+                <i class="fe {{ getCategoryIcon('Station') }} me-2 text-{{ getCategoryColor('Station') }}"></i>
+                <h5 class="mb-0 fw-bold">Stations ({{ results.stations.count }})</h5>
+            </div>
+            <div class="result-items">
+                <div *ngFor="let item of results.stations.items"
+                    class="result-item d-flex align-items-center p-3 mb-2 border rounded cursor-pointer hover-shadow"
+                    (click)="navigateTo(item)">
+                    <div class="result-icon me-3">
+                        <div class="avatar avatar-sm">
+                            <div
+                                class="avatar-img rounded-circle bg-{{ getCategoryColor('Station') }}-soft d-flex align-items-center justify-content-center">
+                                <i
+                                    class="fe {{ getCategoryIcon('Station') }} text-{{ getCategoryColor('Station') }}"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-content flex-grow-1">
+                        <div class="fw-bold">{{ item.title }}</div>
+                        <small class="text-muted">{{ item.subtitle }}</small>
+                    </div>
+                    <i class="fe fe-chevron-right text-muted"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subscribers Section -->
+        <div *ngIf="results.subscribers.count > 0" class="result-section">
+            <div class="section-header d-flex align-items-center mb-2">
+                <i class="fe {{ getCategoryIcon('Subscriber') }} me-2 text-{{ getCategoryColor('Subscriber') }}"></i>
+                <h5 class="mb-0 fw-bold">Subscribers ({{ results.subscribers.count }})</h5>
+            </div>
+            <div class="result-items">
+                <div *ngFor="let item of results.subscribers.items"
+                    class="result-item d-flex align-items-center p-3 mb-2 border rounded cursor-pointer hover-shadow"
+                    (click)="navigateTo(item)">
+                    <div class="result-icon me-3">
+                        <div class="avatar avatar-sm">
+                            <div
+                                class="avatar-img rounded-circle bg-{{ getCategoryColor('Subscriber') }}-soft d-flex align-items-center justify-content-center">
+                                <i
+                                    class="fe {{ getCategoryIcon('Subscriber') }} text-{{ getCategoryColor('Subscriber') }}"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-content flex-grow-1">
+                        <div class="fw-bold">{{ item.title }}</div>
+                        <small class="text-muted">{{ item.subtitle }}</small>
+                    </div>
+                    <i class="fe fe-chevron-right text-muted"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Devices Section -->
+        <div *ngIf="results.devices.count > 0" class="result-section">
+            <div class="section-header d-flex align-items-center mb-2">
+                <i class="fe {{ getCategoryIcon('Device') }} me-2 text-{{ getCategoryColor('Device') }}"></i>
+                <h5 class="mb-0 fw-bold">Devices ({{ results.devices.count }})</h5>
+            </div>
+            <div class="result-items">
+                <div *ngFor="let item of results.devices.items"
+                    class="result-item d-flex align-items-center p-3 mb-2 border rounded cursor-pointer hover-shadow"
+                    (click)="navigateTo(item)">
+                    <div class="result-icon me-3">
+                        <div class="avatar avatar-sm">
+                            <div
+                                class="avatar-img rounded-circle bg-{{ getCategoryColor('Device') }}-soft d-flex align-items-center justify-content-center">
+                                <i class="fe {{ getCategoryIcon('Device') }} text-{{ getCategoryColor('Device') }}"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-content flex-grow-1">
+                        <div class="fw-bold">{{ item.title }}</div>
+                        <small class="text-muted">{{ item.subtitle }}</small>
+                    </div>
+                    <i class="fe fe-chevron-right text-muted"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-3"></i>Close</button>
+</div>
