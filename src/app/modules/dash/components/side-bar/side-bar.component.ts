@@ -53,9 +53,9 @@ export class SidebarComponent {
 
   performSearch(query: string): void {
     this.searchService.search(query).subscribe({
-      next: (response: any) => {
-        if (response.success && response.data) {
-          this.openSearchResults(response.data, query);
+      next: (res: any) => {
+        if (res.success && res.data) {
+          this.openSearchResults(res.data, query);
         }
       },
       error: (error) => {
@@ -94,5 +94,13 @@ export class SidebarComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    if (this.currentSearchModal) {
+      this.currentSearchModal.dismiss();
+      this.currentSearchModal = null;
+    }
   }
 }

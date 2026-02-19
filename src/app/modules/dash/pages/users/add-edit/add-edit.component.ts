@@ -153,9 +153,9 @@ export class AddEditUsersComponent {
         next: (res: any) => {
           if (res.success) {
             this.activeModal.close();
-            this.toastrsService.Showsuccess(res.message || res.msg);
+            this.toastrsService.Showsuccess(res.msg || res.msg);
           } else {
-            this.toastrsService.Showerror(res.message || res.msg);
+            this.toastrsService.Showerror(res.msg || res.msg);
           }
         },
       });

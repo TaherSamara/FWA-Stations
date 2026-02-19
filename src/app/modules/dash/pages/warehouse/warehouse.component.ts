@@ -62,7 +62,7 @@ export class WarehouseComponent {
             this.totalCount = res.data.total_count;
             this.totalRecords = res.data.total_records;
           } else {
-            this.toastrsService.Showerror(res.message || res.msg);
+            this.toastrsService.Showerror(res.msg || res.msg);
           }
         },
       });

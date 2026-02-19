@@ -24,14 +24,14 @@ export class PermissionsService {
       this.permissionsCache$ = this.http
         .get<any>(this.api.common.permissions)
         .pipe(
-          map((response) => {
-            if (!response.success || !response.data) {
+          map((res) => {
+            if (!res.success || !res.data) {
               return [];
             }
 
             // Transform new API structure to flat array
             const allPermissions: Permission[] = [];
-            response.data.forEach((categoryGroup: any) => {
+            res.data.forEach((categoryGroup: any) => {
               if (
                 categoryGroup.permissions &&
                 Array.isArray(categoryGroup.permissions)

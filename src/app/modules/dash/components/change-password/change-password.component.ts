@@ -77,14 +77,14 @@ export class ChangePasswordComponent {
         formData.confirm_password,
       )
       .subscribe({
-        next: (response: any) => {
+        next: (res: any) => {
           this.isLoading = false;
-          if (response.success) {
+          if (res.success) {
             this.toasterService.Showsuccess('Password changed successfully');
             this.activeModal.close(true);
           } else {
             this.toasterService.Showerror(
-              response.message || 'Failed to change password',
+              res.msg || 'Failed to change password',
             );
           }
         },

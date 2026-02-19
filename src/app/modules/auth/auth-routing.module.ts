@@ -11,7 +11,7 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent,
-        title: 'Login | School Bus'
+        title: 'Login | FWA System'
       },
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: '**', redirectTo: 'login', pathMatch: 'full' },

@@ -48,11 +48,9 @@ export class PingComponent {
               this.toastrsService.Showsuccess('Ping completed successfully');
             }
           } else {
-            this.toastrsService.Showerror(
-              res.message || res.msg || 'Ping failed',
-            );
+            this.toastrsService.Showerror(res.msg || res.msg || 'Ping failed');
             this.pingResult = res.data || {
-              ping: { status: 'Error', error: res.message || res.msg },
+              ping: { status: 'Error', error: res.msg || res.msg },
             };
             this.extractPacketStats();
           }

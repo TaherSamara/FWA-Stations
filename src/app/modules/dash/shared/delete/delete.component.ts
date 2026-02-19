@@ -51,12 +51,12 @@ export class DeleteComponent {
     this.httpService.action(url, data, 'deleteAction').subscribe({
       next: (res: any) => {
         if (res.success) {
-          this.showMsg(true, res.message || res.msg);
+          this.showMsg(true, res.msg || res.msg);
           setTimeout(() => {
             this.activeModal.close();
           }, 1000);
         } else {
-          this.showMsg(false, res.message || res.msg);
+          this.showMsg(false, res.msg || res.msg);
         }
       },
     });

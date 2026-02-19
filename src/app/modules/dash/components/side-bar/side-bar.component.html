@@ -28,6 +28,7 @@
           <input type="text" class="form-control form-control-sm search-input" placeholder="Search..."
             [(ngModel)]="searchQuery" (input)="onSearchInput($event)" (keyup)="onSearchKeyup($event)" />
           <i class="fe fe-search search-icon"></i>
+          <i *ngIf="searchQuery" class="fe fe-x clear-icon" (click)="clearSearch()" role="button"></i>
         </div>
       </div>
 
@@ -65,6 +66,7 @@
         <input type="text" class="form-control search-input" placeholder="Search..." [(ngModel)]="searchQuery"
           (input)="onSearchInput($event)" (keyup)="onSearchKeyup($event)" />
         <i class="fe fe-search search-icon"></i>
+        <i *ngIf="searchQuery" class="fe fe-x clear-icon" (click)="clearSearch()" role="button"></i>
       </div>
     </div>
 
