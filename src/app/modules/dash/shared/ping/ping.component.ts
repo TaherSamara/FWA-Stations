@@ -32,9 +32,9 @@ export class PingComponent {
     this.isPinging = true;
     this.pingResult = null;
 
-    this.httpService
-      .action(this.api.subscribers.ping(this.ip), {}, 'pingAction')
-      .subscribe({
+    const url = this.api.subDevices.ping(this.ip);
+
+    this.httpService.action(url, {}, 'pingAction').subscribe({
         next: (res: any) => {
           this.isPinging = false;
           if (res.success) {

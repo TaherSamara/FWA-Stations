@@ -7,12 +7,18 @@ import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { DEVICE_TYPE_TABS } from '../../models';
 import { SharedModule } from '../../shared/shared.module';
-import { AddEditSubscribersComponent } from './add-edit/add-edit.component';
-import { SubscribersComponent } from './subscribers.component';
+import { AddEditSubDevicesComponent } from './add-edit/add-edit.component';
+import { SubDeviceDetailsComponent } from './details/details.component';
+import { SubDevicesComponent } from './sub-devices.component';
 
 @NgModule({
-  declarations: [SubscribersComponent, AddEditSubscribersComponent],
+  declarations: [
+    SubDevicesComponent,
+    AddEditSubDevicesComponent,
+    SubDeviceDetailsComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,8 +26,18 @@ import { SubscribersComponent } from './subscribers.component';
     RouterModule.forChild([
       {
         path: '',
-        component: SubscribersComponent,
+        redirectTo: DEVICE_TYPE_TABS[0].slug,
+        pathMatch: 'full',
       },
+      {
+        path: 'details/:id',
+        component: SubDeviceDetailsComponent,
+      },
+      ...DEVICE_TYPE_TABS.map((tab) => ({
+        path: tab.slug,
+        component: SubDevicesComponent,
+        data: { deviceType: tab.type },
+      })),
     ]),
     NgxPaginationModule,
     NgxSkeletonLoaderModule,
@@ -32,4 +48,4 @@ import { SubscribersComponent } from './subscribers.component';
     SharedModule,
   ],
 })
-export class SubscribersModule {}
+export class SubDevicesModule {}

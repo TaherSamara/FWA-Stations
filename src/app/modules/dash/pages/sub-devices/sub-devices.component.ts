@@ -1,28 +1,28 @@
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
-import { PermissionCode } from 'src/app/modules/dash/models';
+import { DeviceType, PermissionCode } from 'src/app/modules/dash/models';
 import { ApiService } from '../../services/api.service';
 import { HttpService } from '../../services/http.service';
 import { PublicService } from '../../services/public.service';
 import { ToastrsService } from '../../services/toater.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
-import { ImportComponent } from '../../shared/import/import.component';
 import { PingComponent } from '../../shared/ping/ping.component';
-import { AddEditSubscribersComponent } from './add-edit/add-edit.component';
+import { AddEditSubDevicesComponent } from './add-edit/add-edit.component';
 
 @Component({
-  selector: 'app-subscribers',
-  templateUrl: './subscribers.component.html',
-  styleUrls: ['./subscribers.component.css'],
+  selector: 'app-sub-devices',
+  templateUrl: './sub-devices.component.html',
+  styleUrls: ['./sub-devices.component.css'],
 })
-export class SubscribersComponent {
-  subscribers: any = [];
-  stations: any = [];
+export class SubDevicesComponent {
+  subDevices: any = [];
+  devices: any = [];
   searchText: string = '';
-  selectedStationId: number = 0;
+  selectedDeviceId: number = 0;
+  selectedDeviceType: DeviceType;
   selectedServiceTypes: number[] = [10, 20, 30]; // Default: all filters selected
   serviceTypeCounts: any = { 10: 0, 20: 0, 30: 0 }; // Counts for each service type
   page: number = 1;
@@ -40,31 +40,34 @@ export class SubscribersComponent {
     private toastrsService: ToastrsService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
+    private router: Router,
     public authService: AuthService,
   ) {
     this.size = this.publicService.getNumOfRows(290, 70.57);
   }
 
   ngOnInit(): void {
-    this.loadStations();
+    this.loadDevices();
 
-    // Check if stationId is passed from route
+    this.selectedDeviceType = this.route.snapshot.data['deviceType'];
+
+    // Check if deviceId is passed from route
     this.route.queryParams.subscribe((params) => {
-      if (params['stationId']) {
-        this.selectedStationId = +params['stationId'];
+      if (params['deviceId']) {
+        this.selectedDeviceId = +params['deviceId'];
       }
       this.list(1);
     });
   }
 
-  loadStations(): void {
+  loadDevices(): void {
     let params = new HttpParams().set('page', 1).set('size', 1000);
     this.httpService
-      .list(this.api.stations.list, { params }, 'stationsDropdown')
+      .list(this.api.devices.list, { params }, 'devicesDropdown')
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            this.stations = res.data.data;
+            this.devices = res.data.data;
           }
         },
       });
@@ -77,8 +80,8 @@ export class SubscribersComponent {
       .set('size', this.size)
       .set('page', this.page);
 
-    if (this.selectedStationId > 0) {
-      params = params.set('stationId', this.selectedStationId);
+    if (this.selectedDeviceId > 0) {
+      params = params.set('deviceId', this.selectedDeviceId);
     }
 
     // Add service type filters
@@ -88,14 +91,14 @@ export class SubscribersComponent {
 
     this.httpService
       .list(
-        this.api.subscribers.list,
+        this.api.subDevices.list,
         { params },
-        withLoader ? 'subscribersList' : '',
+        withLoader ? 'subDevicesList' : '',
       )
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            this.subscribers = res.data.data;
+            this.subDevices = res.data.data;
             this.totalCount = res.data.total_count;
             this.totalRecords = res.data.total_records;
             this.updateServiceTypeCounts();
@@ -121,28 +124,28 @@ export class SubscribersComponent {
   }
 
   updateServiceTypeCounts(): void {
-    // Get counts from all subscribers (without filter)
+    // Get counts from all sub devices (without filter)
     let params = new HttpParams()
       .set('q', this.searchText)
       .set('size', 1000)
       .set('page', 1);
 
-    if (this.selectedStationId > 0) {
-      params = params.set('stationId', this.selectedStationId);
+    if (this.selectedDeviceId > 0) {
+      params = params.set('deviceId', this.selectedDeviceId);
     }
 
     this.httpService
-      .list(this.api.subscribers.list, { params }, 'countsLoading')
+      .list(this.api.subDevices.list, { params }, 'countsLoading')
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            const allSubscribers = res.data.data;
+            const allSubDevices = res.data.data;
             this.serviceTypeCounts = {
-              10: allSubscribers.filter((s: any) => s.service_type === 10)
+              10: allSubDevices.filter((s: any) => s.service_type === 10)
                 .length,
-              20: allSubscribers.filter((s: any) => s.service_type === 20)
+              20: allSubDevices.filter((s: any) => s.service_type === 20)
                 .length,
-              30: allSubscribers.filter((s: any) => s.service_type === 30)
+              30: allSubDevices.filter((s: any) => s.service_type === 30)
                 .length,
             };
           }
@@ -151,37 +154,30 @@ export class SubscribersComponent {
   }
 
   add() {
-    const modalRef = this.modalService.open(AddEditSubscribersComponent, {
+    const modalRef = this.modalService.open(AddEditSubDevicesComponent, {
       size: 'xl',
       centered: true,
     });
-    modalRef.componentInstance.stations = this.stations;
+    modalRef.componentInstance.devices = this.devices;
+    modalRef.componentInstance.deviceId = this.selectedDeviceId;
     modalRef.result.then(() => this.list(1, false));
   }
 
-  edit(subscriber: any) {
-    const modalRef = this.modalService.open(AddEditSubscribersComponent, {
+  edit(subDevice: any) {
+    const modalRef = this.modalService.open(AddEditSubDevicesComponent, {
       size: 'xl',
       centered: true,
     });
-    modalRef.componentInstance.subscriber = subscriber;
-    modalRef.componentInstance.stations = this.stations;
+    modalRef.componentInstance.subDevice = subDevice;
+    modalRef.componentInstance.devices = this.devices;
     modalRef.result.then(() => this.list(1, false));
   }
 
-  delete(subscriber: any) {
+  delete(subDevice: any) {
     const modalRef = this.modalService.open(DeleteComponent, {});
-    modalRef.componentInstance.id = subscriber.id;
-    modalRef.componentInstance.type = 'subscriber';
-    modalRef.componentInstance.message = `Do you want to delete ${subscriber.name}?`;
-    modalRef.result.then(() => this.list(1, false));
-  }
-
-  importExcel() {
-    const modalRef = this.modalService.open(ImportComponent, {
-      size: 'md',
-      centered: true,
-    });
+    modalRef.componentInstance.id = subDevice.id;
+    modalRef.componentInstance.type = 'subDevice';
+    modalRef.componentInstance.message = `Do you want to delete ${subDevice.name}?`;
     modalRef.result.then(() => this.list(1, false));
   }
 
@@ -194,8 +190,12 @@ export class SubscribersComponent {
     return types[type] || 'Unknown';
   }
 
-  pingIP(subscriber: any) {
-    if (!subscriber.management_ip) {
+  viewDetails(subDevice: any) {
+    this.router.navigate(['/sub-devices/details', subDevice.id]);
+  }
+
+  pingIP(subDevice: any) {
+    if (!subDevice.management_ip) {
       this.toastrsService.Showerror('No IP address available');
       return;
     }
@@ -203,6 +203,6 @@ export class SubscribersComponent {
       size: 'lg',
       centered: true,
     });
-    modalRef.componentInstance.ip = subscriber.management_ip;
+    modalRef.componentInstance.ip = subDevice.management_ip;
   }
 }

@@ -1,7 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { SearchResults } from '../../services/search.service';
+import {
+  DeviceType,
+  DeviceTypeTab,
+  getDeviceTypeTab,
+} from 'src/app/modules/dash/models';
+import { SearchResultItem, SearchResults } from '../../services/search.service';
 
 @Component({
   selector: 'app-search-results',
@@ -17,58 +22,48 @@ export class SearchResultsComponent {
     private router: Router,
   ) {}
 
-  navigateTo(item: any) {
+  navigateTo(item: SearchResultItem) {
     this.activeModal.close();
 
     switch (item.type) {
-      case 'User':
-        this.router.navigate(['/users'], {
+      case 'Device': {
+        const tab = this.getDeviceTab(item);
+        const slug = tab?.slug || '';
+        this.router.navigate(['/devices', slug], {
           queryParams: { highlight: item.id },
         });
         break;
-      case 'Station':
-        this.router.navigate(['/stations'], {
-          queryParams: { highlight: item.id },
-        });
-        break;
-      case 'Subscriber':
-        this.router.navigate(['/subscribers'], {
-          queryParams: { highlight: item.id },
-        });
-        break;
-      case 'Device':
-        this.router.navigate(['/warehouse'], {
-          queryParams: { highlight: item.id },
-        });
+      }
+      case 'SubDevice':
+        this.router.navigate(['/sub-devices/details', item.id]);
         break;
     }
   }
 
-  getCategoryIcon(type: string): string {
-    switch (type) {
-      case 'User':
-        return 'fe-users';
-      case 'Station':
-        return 'fe-server';
-      case 'Subscriber':
-        return 'fe-radio';
-      case 'Device':
-        return 'fe-package';
-      default:
-        return 'fe-search';
+  // Device items carry their type only inside the "Type: X" subtitle
+  // sent by the backend (X is the DeviceType enum name, e.g. "Router").
+  getDeviceTab(item: SearchResultItem): DeviceTypeTab | undefined {
+    const match = item.subtitle?.match(/Type:\s*([A-Za-z]+)/);
+    if (!match) {
+      return undefined;
     }
+    const type = (DeviceType as any)[match[1]] as DeviceType | undefined;
+    return type !== undefined ? getDeviceTypeTab(type) : undefined;
+  }
+
+  getCategoryIcon(item: SearchResultItem): string {
+    if (item.type === 'Device') {
+      return this.getDeviceTab(item)?.icon || 'fe-server';
+    }
+    return 'fe-radio';
   }
 
   getCategoryColor(type: string): string {
     switch (type) {
-      case 'User':
-        return 'primary';
-      case 'Station':
-        return 'info';
-      case 'Subscriber':
-        return 'success';
       case 'Device':
-        return 'warning';
+        return 'primary';
+      case 'SubDevice':
+        return 'success';
       default:
         return 'secondary';
     }

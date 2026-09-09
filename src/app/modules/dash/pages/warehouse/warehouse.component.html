@@ -7,11 +7,11 @@
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-sm btn-success" (click)="importExcel()"
-                *hasPermission="PermissionCode.IMPORT_DEVICES">
+                *hasPermission="PermissionCode.IMPORT_WAREHOUSE_DEVICES">
                 <i class="fe fe-upload me-3"></i>
                 <span>Import Excel</span>
             </button>
-            <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_DEVICE">
+            <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_WAREHOUSE_DEVICE">
                 <i class="fe fe-plus me-3"></i>
                 <span>New Device</span>
             </button>
@@ -89,15 +89,15 @@
                                         <span>Update Line Code</span>
                                     </a>
                                 </li>
-                                <li *hasPermission="PermissionCode.EDIT_DEVICE">
+                                <li *hasPermission="PermissionCode.EDIT_WAREHOUSE_DEVICE">
                                     <a class="dropdown-item" (click)="edit(device)">
                                         <i class="fe fe-edit me-3"></i>Edit
                                     </a>
                                 </li>
-                                <li *hasPermission="PermissionCode.DELETE_DEVICE">
+                                <li *hasPermission="PermissionCode.DELETE_WAREHOUSE_DEVICE">
                                     <hr class="m-2">
                                 </li>
-                                <li *hasPermission="PermissionCode.DELETE_DEVICE">
+                                <li *hasPermission="PermissionCode.DELETE_WAREHOUSE_DEVICE">
                                     <a class="dropdown-item" (click)="delete(device)">
                                         <i class="fe fe-trash-2 text-danger me-3"></i>
                                         <span class="text-danger">Delete</span>

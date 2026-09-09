@@ -1,29 +1,29 @@
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
-import { PermissionCode } from 'src/app/modules/dash/models';
+import { DeviceType, getDeviceTypeTab, PermissionCode } from 'src/app/modules/dash/models';
 import { ApiService } from '../../services/api.service';
 import { HttpService } from '../../services/http.service';
 import { PublicService } from '../../services/public.service';
 import { ToastrsService } from '../../services/toater.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
-import { ImportComponent } from '../../shared/import/import.component';
-import { AddEditStationsComponent } from './add-edit/add-edit.component';
+import { AddEditDevicesComponent } from './add-edit/add-edit.component';
 
 @Component({
-  selector: 'app-stations',
-  templateUrl: './stations.component.html',
-  styleUrls: ['./stations.component.css'],
+  selector: 'app-devices',
+  templateUrl: './devices.component.html',
+  styleUrls: ['./devices.component.css'],
 })
-export class StationsComponent {
-  stations: any = [];
+export class DevicesComponent {
+  devices: any = [];
   searchText: string = '';
   page: number = 1;
-  size: number = 54;
+  size: number = 18;
   totalCount: number;
   totalRecords: number;
+  deviceType: DeviceType;
 
   // Permissions
   PermissionCode = PermissionCode;
@@ -35,11 +35,15 @@ export class StationsComponent {
     private toastrsService: ToastrsService,
     private modalService: NgbModal,
     private router: Router,
+    private route: ActivatedRoute,
     public authService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    this.list(1);
+    this.route.data.subscribe((data) => {
+      this.deviceType = data['deviceType'];
+      this.list(1);
+    });
   }
 
   list(p: number, withLoader: boolean = true): void {
@@ -47,18 +51,19 @@ export class StationsComponent {
     let params = new HttpParams()
       .set('q', this.searchText)
       .set('size', this.size)
-      .set('page', this.page);
+      .set('page', this.page)
+      .set('type', this.deviceType);
 
     this.httpService
       .list(
-        this.api.stations.list,
+        this.api.devices.list,
         { params },
-        withLoader ? 'stationsList' : '',
+        withLoader ? 'devicesList' : '',
       )
       .subscribe({
         next: (res: any) => {
           if (res.success) {
-            this.stations = res.data.data;
+            this.devices = res.data.data;
             this.totalCount = res.data.total_count;
             this.totalRecords = res.data.total_records;
           } else {
@@ -69,41 +74,35 @@ export class StationsComponent {
   }
 
   add() {
-    const modalRef = this.modalService.open(AddEditStationsComponent, {
+    const modalRef = this.modalService.open(AddEditDevicesComponent, {
       size: 'md',
       centered: true,
     });
+    modalRef.componentInstance.deviceType = this.deviceType;
     modalRef.result.then(() => this.list(1, false));
   }
 
-  edit(station: any) {
-    const modalRef = this.modalService.open(AddEditStationsComponent, {
+  edit(device: any) {
+    const modalRef = this.modalService.open(AddEditDevicesComponent, {
       size: 'md',
       centered: true,
     });
-    modalRef.componentInstance.station = station;
+    modalRef.componentInstance.device = device;
     modalRef.result.then(() => this.list(1, false));
   }
 
-  delete(station: any) {
+  delete(device: any) {
     const modalRef = this.modalService.open(DeleteComponent, {});
-    modalRef.componentInstance.id = station.id;
-    modalRef.componentInstance.type = 'station';
-    modalRef.componentInstance.message = `Do you want to delete ${station.name}?`;
+    modalRef.componentInstance.id = device.id;
+    modalRef.componentInstance.type = 'device';
+    modalRef.componentInstance.message = `Do you want to delete ${device.name}?`;
     modalRef.result.then(() => this.list(1, false));
   }
 
-  viewSubscribers(station: any) {
-    this.router.navigate(['/subscribers'], {
-      queryParams: { stationId: station.id },
+  viewSubDevices(device: any) {
+    const slug = getDeviceTypeTab(device.type)?.slug || '';
+    this.router.navigate(['/sub-devices', slug], {
+      queryParams: { deviceId: device.id },
     });
-  }
-
-  importExcel() {
-    const modalRef = this.modalService.open(ImportComponent, {
-      size: 'md',
-      centered: true,
-    });
-    modalRef.result.then(() => this.list(1, false));
   }
 }

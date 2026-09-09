@@ -20,32 +20,32 @@ const routes: Routes = [
         title: 'Users | FWA System',
       },
       {
-        path: 'stations',
+        path: 'devices',
         canActivate: [AuthGuard, PermissionGuard],
-        data: { permission: PermissionCode.VIEW_STATIONS },
+        data: { permission: PermissionCode.VIEW_DEVICES },
         loadChildren: () =>
-          import('./pages/stations/stations.module').then(
-            (m) => m.StationsModule,
+          import('./pages/devices/devices.module').then(
+            (m) => m.DevicesModule,
           ),
-        title: 'Stations | FWA System',
+        title: 'Devices | FWA System',
       },
       {
-        path: 'subscribers',
+        path: 'sub-devices',
         canActivate: [AuthGuard, PermissionGuard],
-        data: { permission: PermissionCode.VIEW_SUBSCRIBERS },
+        data: { permission: PermissionCode.VIEW_SUBDEVICES },
         loadChildren: () =>
-          import('./pages/subscribers/subscribers.module').then(
-            (m) => m.SubscribersModule,
+          import('./pages/sub-devices/sub-devices.module').then(
+            (m) => m.SubDevicesModule,
           ),
-        title: 'Subscribers | FWA System',
+        title: 'Sub Devices | FWA System',
       },
       {
         path: 'warehouse',
         canActivate: [AuthGuard, PermissionGuard],
         data: {
           permissions: [
-            PermissionCode.VIEW_ALL_DEVICES,
-            PermissionCode.VIEW_MY_DEVICES,
+            PermissionCode.VIEW_ALL_WAREHOUSE_DEVICES,
+            PermissionCode.VIEW_MY_WAREHOUSE_DEVICES,
           ],
         },
         loadChildren: () =>
@@ -69,4 +69,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashRoutingModule {}
+export class DashRoutingModule { }

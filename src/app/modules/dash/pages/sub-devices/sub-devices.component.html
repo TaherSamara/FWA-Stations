@@ -1,0 +1,119 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex align-items-center input-group-merge input-group-flush input-group position-relative">
+            <i class="fe fe-search text-muted position-absolute me-3"></i>
+            <input [disabled]="totalCount == 0" [(ngModel)]="searchText" class="form-control m-0 ps-4"
+                placeholder="Type to search..." (ngModelChange)="list(1)">
+        </div>
+        <div class="d-flex gap-2">
+            <!-- <div class="d-flex gap-2 align-items-center me-5">
+                <button class="btn btn-sm" [ngClass]="isServiceTypeSelected(10) ? 'btn-success' : 'btn-outline-success'"
+                    (click)="toggleServiceType(10)">
+                    Mobadara ({{ serviceTypeCounts[10] }})
+                </button>
+                <button class="btn btn-sm" [ngClass]="isServiceTypeSelected(20) ? 'btn-success' : 'btn-outline-success'"
+                    (click)="toggleServiceType(20)">
+                    PTP ({{ serviceTypeCounts[20] }})
+                </button>
+                <button class="btn btn-sm" [ngClass]="isServiceTypeSelected(30) ? 'btn-success' : 'btn-outline-success'"
+                    (click)="toggleServiceType(30)">
+                    Base Station ({{ serviceTypeCounts[30] }})
+                </button>
+            </div> -->
+            <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_SUBDEVICE">
+                <i class="fe fe-plus me-3"></i>
+                <span>New Sub Device</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-nowrap card-table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th class="w-12">Name</th>
+                    <th class="w-10">Device</th>
+                    <th class="w-10">Service Type</th>
+                    <th class="w-8">Line Code</th>
+                    <th class="w-8">Unit Type</th>
+                    <th class="w-10">Mgmt IP</th>
+                    <th class="w-5">Actions</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="!(httpService.getLoading('subDevicesList') | async) && totalRecords > 0">
+                <tr class="cursor-pointer"
+                    *ngFor="let subDevice of subDevices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index"
+                    (click)="viewDetails(subDevice)">
+                    <td class="fw-bold">{{ subDevice?.name || '-' }}</td>
+                    <td>{{ subDevice?.device?.name || '-' }}</td>
+                    <td>
+                        <span class="badge bg-primary-soft text-primary">{{ getServiceTypeName(subDevice?.service_type) }}</span>
+                    </td>
+                    <td>{{ subDevice?.line_code || '-' }}</td>
+                    <td>{{ subDevice?.unit_type || '-' }}</td>
+                    <td (click)="$event.stopPropagation()">
+                        <a *ngIf="subDevice?.management_ip" [href]="'http://' + subDevice.management_ip"
+                            target="_blank" class="text-primary text-decoration-none" title="Open in new tab">
+                            {{ subDevice.management_ip }}
+                            <i class="fe fe-external-link ms-1 small"></i>
+                        </a>
+                        <span *ngIf="!subDevice?.management_ip">-</span>
+                    </td>
+                    <td (click)="$event.stopPropagation()">
+                        <div class="btn-group dropstart">
+                            <span data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fe fe-more-vertical black-menu fs-2"></i>
+                            </span>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" (click)="viewDetails(subDevice)">
+                                        <i class="fe fe-eye me-3"></i>View Details
+                                    </a>
+                                </li>
+                                <li *hasPermission="PermissionCode.EDIT_SUBDEVICE">
+                                    <a class="dropdown-item" (click)="edit(subDevice)">
+                                        <i class="fe fe-edit me-3"></i>Edit
+                                    </a>
+                                </li>
+                                <li *hasPermission="PermissionCode.VIEW_SUBDEVICES">
+                                    <a class="dropdown-item" (click)="pingIP(subDevice)"
+                                        [class.disabled]="!subDevice?.management_ip">
+                                        <i class="fe fe-activity text-success me-3"></i>
+                                        <span [class.text-muted]="!subDevice?.management_ip">Ping</span>
+                                    </a>
+                                </li>
+                                <li *hasPermission="PermissionCode.DELETE_SUBDEVICE">
+                                    <hr class="m-2">
+                                </li>
+                                <li *hasPermission="PermissionCode.DELETE_SUBDEVICE">
+                                    <a class="dropdown-item" (click)="delete(subDevice)">
+                                        <i class="fe fe-trash-2 text-danger me-3"></i>
+                                        <span class="text-danger">Delete</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- loading -->
+            <tbody *ngIf="(httpService.getLoading('subDevicesList') | async)">
+                <tr *ngFor="let number of [].constructor(+size+1)">
+                    <td style="padding: 19.9px;" *ngFor="let number of [].constructor(+7)">
+                        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+                            [theme]="{width:'70%',height:'23.5px','border-radius':'3px','margin':'0'}"></ngx-skeleton-loader>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- if no results -->
+    <app-no-results [isLoading$]="httpService.getLoading('subDevicesList')"
+        [totalRecords]="totalRecords"></app-no-results>
+
+    <!-- pagination -->
+    <app-pagination [isLoading$]="httpService.getLoading('subDevicesList')" [totalRecords]="totalRecords" [size]="size"
+        (pageChange)="list($event)"></app-pagination>
+</div>

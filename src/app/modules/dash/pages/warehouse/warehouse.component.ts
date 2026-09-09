@@ -108,7 +108,7 @@ export class WarehouseComponent {
   delete(device: any) {
     const modalRef = this.modalService.open(DeleteComponent, {});
     modalRef.componentInstance.id = device.id;
-    modalRef.componentInstance.type = 'device';
+    modalRef.componentInstance.type = 'warehouseDevice';
     modalRef.componentInstance.message = `Do you want to delete device with serial number ${device.serial_number}?`;
     modalRef.result.then(
       () => this.list(1, false),

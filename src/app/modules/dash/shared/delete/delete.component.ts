@@ -37,13 +37,13 @@ export class DeleteComponent {
       case 'user':
         url = this.api.users.delete(this.id);
         break;
-      case 'station':
-        url = this.api.stations.delete(this.id);
-        break;
-      case 'subscriber':
-        url = this.api.subscribers.delete(this.id);
-        break;
       case 'device':
+        url = this.api.devices.delete(this.id);
+        break;
+      case 'subDevice':
+        url = this.api.subDevices.delete(this.id);
+        break;
+      case 'warehouseDevice':
         url = this.api.warehouse.delete(this.id);
         break;
     }

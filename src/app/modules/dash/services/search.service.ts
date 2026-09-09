@@ -5,26 +5,18 @@ import { HttpService } from './http.service';
 
 export interface SearchResultItem {
   id: number;
-  type: 'User' | 'Station' | 'Subscriber' | 'Device';
+  type: 'Device' | 'SubDevice';
   title: string;
   subtitle: string;
   image: string | null;
 }
 
 export interface SearchResults {
-  users: {
-    count: number;
-    items: SearchResultItem[];
-  };
-  stations: {
-    count: number;
-    items: SearchResultItem[];
-  };
-  subscribers: {
-    count: number;
-    items: SearchResultItem[];
-  };
   devices: {
+    count: number;
+    items: SearchResultItem[];
+  };
+  subDevices: {
     count: number;
     items: SearchResultItem[];
   };

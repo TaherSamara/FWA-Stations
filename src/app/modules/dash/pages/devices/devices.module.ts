@@ -7,12 +7,13 @@ import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { DEVICE_TYPE_TABS } from '../../models';
 import { SharedModule } from '../../shared/shared.module';
-import { AddEditStationsComponent } from './add-edit/add-edit.component';
-import { StationsComponent } from './stations.component';
+import { AddEditDevicesComponent } from './add-edit/add-edit.component';
+import { DevicesComponent } from './devices.component';
 
 @NgModule({
-  declarations: [StationsComponent, AddEditStationsComponent],
+  declarations: [DevicesComponent, AddEditDevicesComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,8 +21,14 @@ import { StationsComponent } from './stations.component';
     RouterModule.forChild([
       {
         path: '',
-        component: StationsComponent,
+        redirectTo: DEVICE_TYPE_TABS[0].slug,
+        pathMatch: 'full',
       },
+      ...DEVICE_TYPE_TABS.map((tab) => ({
+        path: tab.slug,
+        component: DevicesComponent,
+        data: { deviceType: tab.type },
+      })),
     ]),
     NgxPaginationModule,
     NgxSkeletonLoaderModule,
@@ -32,4 +39,4 @@ import { StationsComponent } from './stations.component';
     SharedModule,
   ],
 })
-export class StationsModule {}
+export class DevicesModule {}

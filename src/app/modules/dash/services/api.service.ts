@@ -16,22 +16,22 @@ export class ApiService {
     delete: (id: number) => API_BASE_URL + 'Users/delete/' + id,
   };
 
-  // Stations Management
-  stations = {
-    list: API_BASE_URL + 'Stations/list',
-    add: API_BASE_URL + 'Stations/add',
-    edit: (id: number) => API_BASE_URL + 'Stations/edit/' + id,
-    delete: (id: number) => API_BASE_URL + 'Stations/delete/' + id,
+  // Devices Management
+  devices = {
+    list: API_BASE_URL + 'Devices/list',
+    add: API_BASE_URL + 'Devices/add',
+    edit: (id: number) => API_BASE_URL + 'Devices/edit/' + id,
+    delete: (id: number) => API_BASE_URL + 'Devices/delete/' + id,
   };
 
-  // Subscribers Management
-  subscribers = {
-    list: API_BASE_URL + 'Subscribers/list',
-    add: API_BASE_URL + 'Subscribers/add',
-    edit: (id: number) => API_BASE_URL + 'Subscribers/edit/' + id,
-    delete: (id: number) => API_BASE_URL + 'Subscribers/delete/' + id,
-    import: API_BASE_URL + 'Subscribers/import',
-    ping: (ip: string) => API_BASE_URL + 'Subscribers/ping/' + ip,
+  // Sub Devices Management
+  subDevices = {
+    list: API_BASE_URL + 'SubDevices/list',
+    details: (id: number) => API_BASE_URL + 'SubDevices/details/' + id,
+    add: API_BASE_URL + 'SubDevices/add',
+    edit: (id: number) => API_BASE_URL + 'SubDevices/edit/' + id,
+    delete: (id: number) => API_BASE_URL + 'SubDevices/delete/' + id,
+    ping: (ip: string) => API_BASE_URL + 'SubDevices/ping/' + ip,
   };
 
   // Warehouse Management

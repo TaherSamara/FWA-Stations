@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { PermissionCode } from 'src/app/modules/dash/models';
+import { DEVICE_TYPE_TABS, PermissionCode } from 'src/app/modules/dash/models';
 import { AuthService } from '../../../auth/services/auth.service';
 import { PublicService } from '../../services/public.service';
 import { SearchService } from '../../services/search.service';
@@ -16,6 +16,7 @@ import { SearchResultsComponent } from '../search-results/search-results.compone
 export class SidebarComponent {
   user: any = {};
   PermissionCode = PermissionCode;
+  deviceTypeTabs = DEVICE_TYPE_TABS;
   searchQuery: string = '';
   private searchSubject = new Subject<string>();
   private currentSearchModal: any = null;

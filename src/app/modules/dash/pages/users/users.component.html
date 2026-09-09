@@ -15,11 +15,11 @@
             <thead>
                 <tr>
                     <th class="w-5">#No</th>
-                    <th class="w-15">Name</th>
-                    <th class="w-15">Email</th>
-                    <th class="w-25">Permissions</th>
-                    <th class="w-15">Created By</th>
-                    <th class="w-15">Updated By</th>
+                    <th class="w-14">Name</th>
+                    <th class="w-14">Email</th>
+                    <th class="w-34">Permissions</th>
+                    <th class="w-14">Created By</th>
+                    <th class="w-14">Updated By</th>
                     <th class="w-5">Actions</th>
                 </tr>
             </thead>
@@ -33,8 +33,7 @@
                         <div class="d-flex flex-wrap gap-2"
                             *ngIf="user?.permissions && user.permissions.length > 0; else noPermissions">
                             <span *ngFor="let category of getPermissionsByCategory(user.permissions)"
-                                class="badge badge-sm text-white" [ngClass]="getCategoryBadgeClass(category.name)"
-                                [title]="getCategoryTooltip(category)">
+                                class="badge badge-sm text-white bg-primary" [title]="getCategoryTooltip(category)">
                                 {{ category.name }} ({{ category.count }})
                             </span>
                         </div>

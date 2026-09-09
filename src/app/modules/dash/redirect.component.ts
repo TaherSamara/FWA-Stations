@@ -12,7 +12,7 @@ export class RedirectComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.redirectToFirstAvailablePage();
@@ -22,15 +22,12 @@ export class RedirectComponent implements OnInit {
     // Check permissions in order and redirect to first available page
     if (this.authService.hasPermission(PermissionCode.VIEW_USERS)) {
       this.router.navigate(['/users']);
-    } else if (this.authService.hasPermission(PermissionCode.VIEW_STATIONS)) {
-      this.router.navigate(['/stations']);
-    } else if (
-      this.authService.hasPermission(PermissionCode.VIEW_SUBSCRIBERS)
-    ) {
-      this.router.navigate(['/subscribers']);
-    } else if (
-      this.authService.hasPermission(PermissionCode.VIEW_ALL_DEVICES) ||
-      this.authService.hasPermission(PermissionCode.VIEW_MY_DEVICES)
+    } else if (this.authService.hasPermission(PermissionCode.VIEW_DEVICES)) {
+      this.router.navigate(['/devices']);
+    } else if (this.authService.hasPermission(PermissionCode.VIEW_SUBDEVICES)) {
+      this.router.navigate(['/sub-devices']);
+    } else if (this.authService.hasPermission(PermissionCode.VIEW_ALL_WAREHOUSE_DEVICES) ||
+      this.authService.hasPermission(PermissionCode.VIEW_MY_WAREHOUSE_DEVICES)
     ) {
       this.router.navigate(['/warehouse']);
     } else {

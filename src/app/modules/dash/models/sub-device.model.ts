@@ -1,4 +1,4 @@
-import { Station } from './station.model';
+import { Device } from './device.model';
 
 export enum ServiceType {
   Mobadara = 10,
@@ -6,7 +6,7 @@ export enum ServiceType {
   BaseStation = 30,
 }
 
-export interface Subscriber {
+export interface SubDevice {
   id: number;
   name: string;
   line_code: string;
@@ -23,8 +23,8 @@ export interface Subscriber {
   management_vlan?: string;
   service_type: ServiceType;
   notes?: string;
-  station_id: number;
-  station?: Station;
+  device_id: number;
+  device?: Device;
   insert_date?: string;
   update_date?: string;
 }

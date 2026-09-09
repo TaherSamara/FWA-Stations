@@ -130,19 +130,6 @@ export class UsersComponent {
     return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
   }
 
-  // Get badge color based on category
-  getCategoryBadgeClass(category: string): string {
-    const categoryMap: { [key: string]: string } = {
-      Users: 'bg-primary',
-      Stations: 'bg-success',
-      Subscribers: 'bg-info',
-      Devices: 'bg-warning',
-      Other: 'bg-secondary',
-    };
-
-    return categoryMap[category] || 'bg-secondary';
-  }
-
   // Get tooltip with permission details
   getCategoryTooltip(category: any): string {
     if (!category.permissions || category.permissions.length === 0) {

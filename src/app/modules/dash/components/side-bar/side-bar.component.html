@@ -39,19 +39,21 @@
             <span>Users</span>
           </a>
         </li>
-        <li class="nav-item" *hasPermission="PermissionCode.VIEW_STATIONS">
-          <a class="nav-link" routerLinkActive="active" routerLink="/stations">
-            <i class="fe fe-server"></i>
-            <span>Stations</span>
-          </a>
-        </li>
-        <li class="nav-item" *hasPermission="PermissionCode.VIEW_SUBSCRIBERS">
-          <a class="nav-link" routerLinkActive="active" routerLink="/subscribers">
+        <ng-container *hasPermission="PermissionCode.VIEW_DEVICES">
+          <li class="nav-item" *ngFor="let tab of deviceTypeTabs">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/devices', tab.slug]">
+              <i class="fe {{ tab.icon }}"></i>
+              <span>{{ tab.label }}</span>
+            </a>
+          </li>
+        </ng-container>
+        <!-- <li class="nav-item" *hasPermission="PermissionCode.VIEW_SUBDEVICES">
+          <a class="nav-link" routerLinkActive="active" routerLink="/sub-devices">
             <i class="fe fe-radio"></i>
-            <span>Subscribers</span>
+            <span>Sub Devices</span>
           </a>
-        </li>
-        <li class="nav-item" *hasPermission="[PermissionCode.VIEW_ALL_DEVICES, PermissionCode.VIEW_MY_DEVICES]">
+        </li> -->
+        <li class="nav-item" *hasPermission="[PermissionCode.VIEW_ALL_WAREHOUSE_DEVICES, PermissionCode.VIEW_MY_WAREHOUSE_DEVICES]">
           <a class="nav-link" routerLinkActive="active" routerLink="/warehouse">
             <i class="fe fe-package"></i>
             <span>Warehouse</span>

@@ -6,13 +6,14 @@ import { HttpService } from '../../../services/http.service';
 import { ToastrsService } from '../../../services/toater.service';
 
 @Component({
-  selector: 'app-add-edit-subscribers',
+  selector: 'app-add-edit-sub-devices',
   templateUrl: './add-edit.component.html',
   styleUrls: ['./add-edit.component.css'],
 })
-export class AddEditSubscribersComponent {
-  public subscriber: any;
-  public stations: any[] = [];
+export class AddEditSubDevicesComponent {
+  public subDevice: any;
+  public devices: any[] = [];
+  public deviceId: number;
   form: FormGroup;
   submitted: boolean = false;
 
@@ -48,14 +49,14 @@ export class AddEditSubscribersComponent {
         odf_name: this.f.OdfName.value,
         odf_port: this.f.OdfPort.value,
         management_vlan: this.f.ManagementVlan.value,
-        service_type: this.f.ServiceType.value,
+        service_type: +this.f.ServiceType.value,
         notes: this.f.Notes.value,
-        station_id: this.f.StationId.value,
+        device_id: +this.f.DeviceId.value,
       };
 
-      let url = this.subscriber
-        ? this.api.subscribers.edit(this.subscriber.id)
-        : this.api.subscribers.add;
+      let url = this.subDevice
+        ? this.api.subDevices.edit(this.subDevice.id)
+        : this.api.subDevices.add;
       this.httpService.action(url, requestData, 'addEditAction').subscribe({
         next: (res: any) => {
           if (res.success) {
@@ -71,28 +72,28 @@ export class AddEditSubscribersComponent {
 
   initForm() {
     this.form = new FormGroup({
-      Name: new FormControl(this.subscriber?.name || '', Validators.required),
-      LineCode: new FormControl(this.subscriber?.line_code || ''),
-      UnitType: new FormControl(this.subscriber?.unit_type || ''),
-      LinkMacAddress: new FormControl(this.subscriber?.link_mac_address || ''),
-      UnitDirection: new FormControl(this.subscriber?.unit_direction || ''),
-      ManagementIp: new FormControl(this.subscriber?.management_ip || ''),
-      MikrotikId: new FormControl(this.subscriber?.mikrotik_id || ''),
+      Name: new FormControl(this.subDevice?.name || '', Validators.required),
+      LineCode: new FormControl(this.subDevice?.line_code || ''),
+      UnitType: new FormControl(this.subDevice?.unit_type || ''),
+      LinkMacAddress: new FormControl(this.subDevice?.link_mac_address || ''),
+      UnitDirection: new FormControl(this.subDevice?.unit_direction || ''),
+      ManagementIp: new FormControl(this.subDevice?.management_ip || ''),
+      MikrotikId: new FormControl(this.subDevice?.mikrotik_id || ''),
       MikrotikMacAddress: new FormControl(
-        this.subscriber?.mikrotik_mac_address || '',
+        this.subDevice?.mikrotik_mac_address || '',
       ),
-      SasName: new FormControl(this.subscriber?.sas_name || ''),
-      SasPort: new FormControl(this.subscriber?.sas_port || ''),
-      OdfName: new FormControl(this.subscriber?.odf_name || ''),
-      OdfPort: new FormControl(this.subscriber?.odf_port || ''),
-      ManagementVlan: new FormControl(this.subscriber?.management_vlan || ''),
+      SasName: new FormControl(this.subDevice?.sas_name || ''),
+      SasPort: new FormControl(this.subDevice?.sas_port || ''),
+      OdfName: new FormControl(this.subDevice?.odf_name || ''),
+      OdfPort: new FormControl(this.subDevice?.odf_port || ''),
+      ManagementVlan: new FormControl(this.subDevice?.management_vlan || ''),
       ServiceType: new FormControl(
-        this.subscriber?.service_type || 0,
+        this.subDevice?.service_type || '',
         Validators.required,
       ),
-      Notes: new FormControl(this.subscriber?.notes || ''),
-      StationId: new FormControl(
-        this.subscriber?.station_id || '',
+      Notes: new FormControl(this.subDevice?.notes || ''),
+      DeviceId: new FormControl(
+        this.subDevice?.device_id || this.deviceId || '',
         Validators.required,
       ),
     });

@@ -82,10 +82,9 @@ export class PermissionsService {
   getCategoryName(category: string): string {
     const names: { [key: string]: string } = {
       USERS: 'Users Management',
-      STATIONS: 'Stations Management',
-      SUBSCRIBERS: 'Subscribers Management',
-      WAREHOUSE: 'Warehouse Management',
       DEVICES: 'Devices Management',
+      SUBDEVICES: 'Sub Devices Management',
+      WAREHOUSE: 'Warehouse Management',
     };
     return names[category] || category;
   }

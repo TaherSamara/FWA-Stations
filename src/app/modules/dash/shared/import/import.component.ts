@@ -5,14 +5,14 @@ import { HttpService } from '../../services/http.service';
 import { ToastrsService } from '../../services/toater.service';
 
 @Component({
-  selector: 'app-import-subscribers',
+  selector: 'app-import',
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.css'],
 })
 export class ImportComponent {
   selectedFile: File | null = null;
   submitted: boolean = false;
-  public type: string = 'subscribers'; // 'subscribers' or 'warehouse'
+  public type: string = 'warehouse'; // 'warehouse'
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -34,10 +34,7 @@ export class ImportComponent {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
 
-      const url =
-        this.type === 'warehouse'
-          ? this.api.warehouse.import
-          : this.api.subscribers.import;
+      const url = this.api.warehouse.import;
 
       this.httpService.action(url, formData, 'importAction').subscribe({
         next: (res: any) => {
