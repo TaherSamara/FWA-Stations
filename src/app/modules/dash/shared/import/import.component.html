@@ -1,13 +1,18 @@
 <div class="modal-header">
-    <h4 class="modal-title">Import Warehouse Devices from Excel</h4>
+    <h4 class="modal-title">{{ title }}</h4>
     <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
 </div>
 
 <div class="modal-body">
-    <div class="mb-3">
-        <label class="form-label">Select Excel File <span class="text-danger">*</span></label>
-        <input type="file" class="form-control" accept=".xlsx,.xls"
-            (change)="onFileSelected($event)" [class.is-invalid]="submitted && !selectedFile">
+    <div [ngClass]="{'mb-3': selectedFile}">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="form-label mb-0">Select Excel File <span class="text-danger">*</span></label>
+            <a *ngIf="templateUrl" [href]="templateUrl" target="_blank" class="small">
+                <i class="fe fe-external-link me-1"></i>Open Template
+            </a>
+        </div>
+        <input type="file" class="form-control" accept=".xlsx,.xls" (change)="onFileSelected($event)"
+            [class.is-invalid]="submitted && !selectedFile">
         <div class="invalid-feedback" *ngIf="submitted && !selectedFile">
             Please select an Excel file
         </div>

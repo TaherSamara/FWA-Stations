@@ -1,6 +1,7 @@
 import { Device } from './device.model';
 
 export enum ServiceType {
+  None = 0,
   Mobadara = 10,
   PTP = 20,
   BaseStation = 30,

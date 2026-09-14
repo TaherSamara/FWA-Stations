@@ -27,11 +27,12 @@ export class ApiService {
   // Sub Devices Management
   subDevices = {
     list: API_BASE_URL + 'SubDevices/list',
-    details: (id: number) => API_BASE_URL + 'SubDevices/details/' + id,
     add: API_BASE_URL + 'SubDevices/add',
     edit: (id: number) => API_BASE_URL + 'SubDevices/edit/' + id,
     delete: (id: number) => API_BASE_URL + 'SubDevices/delete/' + id,
     ping: (ip: string) => API_BASE_URL + 'SubDevices/ping/' + ip,
+    import: (device_id: number) =>
+      API_BASE_URL + 'SubDevices/import/' + device_id,
   };
 
   // Warehouse Management

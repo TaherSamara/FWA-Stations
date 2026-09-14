@@ -34,17 +34,13 @@
             </div> -->
 
             <div class="col-md-4 mb-3">
-                <label class="form-label">Service Type <span class="text-danger">*</span></label>
-                <select class="form-select" formControlName="ServiceType"
-                    [class.is-invalid]="submitted && f.ServiceType.errors">
-                    <option value="">Select service type</option>
+                <label class="form-label">Service Type</label>
+                <select class="form-select" formControlName="ServiceType">
+                    <option [value]="0">None</option>
                     <option [value]="10">Mobadara</option>
                     <option [value]="20">PTP</option>
                     <option [value]="30">Base Station</option>
                 </select>
-                <div class="invalid-feedback" *ngIf="submitted && f.ServiceType.errors?.required">
-                    Service type is required
-                </div>
             </div>
 
             <div class="col-md-4 mb-3">

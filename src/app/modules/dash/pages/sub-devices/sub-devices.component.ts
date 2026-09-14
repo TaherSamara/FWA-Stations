@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, HostListener } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { DeviceType, PermissionCode } from 'src/app/modules/dash/models';
@@ -9,6 +9,7 @@ import { HttpService } from '../../services/http.service';
 import { PublicService } from '../../services/public.service';
 import { ToastrsService } from '../../services/toater.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
+import { ImportComponent } from '../../shared/import/import.component';
 import { PingComponent } from '../../shared/ping/ping.component';
 import { AddEditSubDevicesComponent } from './add-edit/add-edit.component';
 
@@ -23,12 +24,16 @@ export class SubDevicesComponent {
   searchText: string = '';
   selectedDeviceId: number = 0;
   selectedDeviceType: DeviceType;
-  selectedServiceTypes: number[] = [10, 20, 30]; // Default: all filters selected
+  selectedServiceType: number | null = null; // null = all service types
   serviceTypeCounts: any = { 10: 0, 20: 0, 30: 0 }; // Counts for each service type
   page: number = 1;
   size: number = 10;
   totalCount: number;
   totalRecords: number;
+
+  // Actions menu (rendered fixed to the viewport so it never gets clipped by the table's scroll container)
+  activeMenuSubDevice: any = null;
+  menuPosition = { top: 0, left: 0 };
 
   // Permissions
   PermissionCode = PermissionCode;
@@ -40,7 +45,6 @@ export class SubDevicesComponent {
     private toastrsService: ToastrsService,
     private modalService: NgbModal,
     private route: ActivatedRoute,
-    private router: Router,
     public authService: AuthService,
   ) {
     this.size = this.publicService.getNumOfRows(290, 70.57);
@@ -81,12 +85,12 @@ export class SubDevicesComponent {
       .set('page', this.page);
 
     if (this.selectedDeviceId > 0) {
-      params = params.set('deviceId', this.selectedDeviceId);
+      params = params.set('device_id', this.selectedDeviceId);
     }
 
-    // Add service type filters
-    if (this.selectedServiceTypes.length > 0) {
-      params = params.set('serviceTypes', this.selectedServiceTypes.join(','));
+    // Add service type filter
+    if (this.selectedServiceType !== null) {
+      params = params.set('service_type', this.selectedServiceType);
     }
 
     this.httpService
@@ -110,17 +114,12 @@ export class SubDevicesComponent {
   }
 
   toggleServiceType(type: number): void {
-    const index = this.selectedServiceTypes.indexOf(type);
-    if (index > -1) {
-      this.selectedServiceTypes.splice(index, 1);
-    } else {
-      this.selectedServiceTypes.push(type);
-    }
+    this.selectedServiceType = this.selectedServiceType === type ? null : type;
     this.list(1);
   }
 
   isServiceTypeSelected(type: number): boolean {
-    return this.selectedServiceTypes.indexOf(type) > -1;
+    return this.selectedServiceType === type;
   }
 
   updateServiceTypeCounts(): void {
@@ -131,7 +130,7 @@ export class SubDevicesComponent {
       .set('page', 1);
 
     if (this.selectedDeviceId > 0) {
-      params = params.set('deviceId', this.selectedDeviceId);
+      params = params.set('device_id', this.selectedDeviceId);
     }
 
     this.httpService
@@ -151,6 +150,21 @@ export class SubDevicesComponent {
           }
         },
       });
+  }
+
+  importExcel() {
+    const modalRef = this.modalService.open(ImportComponent, {
+      size: 'md',
+      centered: true,
+    });
+    modalRef.componentInstance.type = 'subDevices';
+    modalRef.componentInstance.deviceId = this.selectedDeviceId;
+    modalRef.componentInstance.templateUrl =
+      'https://docs.google.com/spreadsheets/d/1gx8AvT4EtF7Q_89AujTJ_2LVyoH3posc_eLVcbqja9E/edit?usp=sharing';
+    modalRef.result.then(
+      () => this.list(1, false),
+      () => {},
+    );
   }
 
   add() {
@@ -183,15 +197,12 @@ export class SubDevicesComponent {
 
   getServiceTypeName(type: number): string {
     const types: any = {
+      0: 'None',
       10: 'Mobadara',
       20: 'PTP',
       30: 'Base Station',
     };
-    return types[type] || 'Unknown';
-  }
-
-  viewDetails(subDevice: any) {
-    this.router.navigate(['/sub-devices/details', subDevice.id]);
+    return types[type] ?? 'Unknown';
   }
 
   pingIP(subDevice: any) {
@@ -204,5 +215,37 @@ export class SubDevicesComponent {
       centered: true,
     });
     modalRef.componentInstance.ip = subDevice.management_ip;
+  }
+
+  toggleMenu(event: MouseEvent, subDevice: any): void {
+    event.stopPropagation();
+
+    if (this.activeMenuSubDevice === subDevice) {
+      this.activeMenuSubDevice = null;
+      return;
+    }
+
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const menuWidth = 200;
+    this.menuPosition = {
+      top: rect.bottom + 4,
+      left: Math.max(8, rect.right - menuWidth),
+    };
+    this.activeMenuSubDevice = subDevice;
+  }
+
+  closeMenu(): void {
+    this.activeMenuSubDevice = null;
+  }
+
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    this.closeMenu();
+  }
+
+  @HostListener('window:scroll')
+  @HostListener('window:resize')
+  onViewportChange(): void {
+    this.closeMenu();
   }
 }

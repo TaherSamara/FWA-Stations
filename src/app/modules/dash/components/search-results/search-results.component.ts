@@ -1,11 +1,16 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   DeviceType,
   DeviceTypeTab,
   getDeviceTypeTab,
 } from 'src/app/modules/dash/models';
+import { AddEditSubDevicesComponent } from '../../pages/sub-devices/add-edit/add-edit.component';
+import { ApiService } from '../../services/api.service';
+import { HttpService } from '../../services/http.service';
+import { ToastrsService } from '../../services/toater.service';
 import { SearchResultItem, SearchResults } from '../../services/search.service';
 
 @Component({
@@ -20,13 +25,16 @@ export class SearchResultsComponent {
   constructor(
     public activeModal: NgbActiveModal,
     private router: Router,
+    private modalService: NgbModal,
+    private api: ApiService,
+    private httpService: HttpService,
+    private toastrsService: ToastrsService,
   ) {}
 
   navigateTo(item: SearchResultItem) {
-    this.activeModal.close();
-
     switch (item.type) {
       case 'Device': {
+        this.activeModal.close();
         const tab = this.getDeviceTab(item);
         const slug = tab?.slug || '';
         this.router.navigate(['/devices', slug], {
@@ -35,9 +43,35 @@ export class SearchResultsComponent {
         break;
       }
       case 'SubDevice':
-        this.router.navigate(['/sub-devices/details', item.id]);
+        this.openSubDevice(item);
         break;
     }
+  }
+
+  openSubDevice(item: SearchResultItem) {
+    const params = new HttpParams()
+      .set('q', item.title)
+      .set('size', 50)
+      .set('page', 1);
+
+    this.httpService.list(this.api.subDevices.list, { params }).subscribe({
+      next: (res: any) => {
+        const subDevice = res.success
+          ? res.data.data.find((x: any) => x.id === item.id)
+          : null;
+
+        if (subDevice) {
+          this.activeModal.close();
+          const modalRef = this.modalService.open(AddEditSubDevicesComponent, {
+            size: 'xl',
+            centered: true,
+          });
+          modalRef.componentInstance.subDevice = subDevice;
+        } else {
+          this.toastrsService.Showerror('Sub Device Not Found!');
+        }
+      },
+    });
   }
 
   // Device items carry their type only inside the "Type: X" subtitle

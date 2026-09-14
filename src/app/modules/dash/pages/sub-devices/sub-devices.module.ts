@@ -10,14 +10,12 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { DEVICE_TYPE_TABS } from '../../models';
 import { SharedModule } from '../../shared/shared.module';
 import { AddEditSubDevicesComponent } from './add-edit/add-edit.component';
-import { SubDeviceDetailsComponent } from './details/details.component';
 import { SubDevicesComponent } from './sub-devices.component';
 
 @NgModule({
   declarations: [
     SubDevicesComponent,
     AddEditSubDevicesComponent,
-    SubDeviceDetailsComponent,
   ],
   imports: [
     CommonModule,
@@ -28,10 +26,6 @@ import { SubDevicesComponent } from './sub-devices.component';
         path: '',
         redirectTo: DEVICE_TYPE_TABS[0].slug,
         pathMatch: 'full',
-      },
-      {
-        path: 'details/:id',
-        component: SubDeviceDetailsComponent,
       },
       ...DEVICE_TYPE_TABS.map((tab) => ({
         path: tab.slug,

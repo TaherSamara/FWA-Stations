@@ -87,10 +87,7 @@ export class AddEditSubDevicesComponent {
       OdfName: new FormControl(this.subDevice?.odf_name || ''),
       OdfPort: new FormControl(this.subDevice?.odf_port || ''),
       ManagementVlan: new FormControl(this.subDevice?.management_vlan || ''),
-      ServiceType: new FormControl(
-        this.subDevice?.service_type || '',
-        Validators.required,
-      ),
+      ServiceType: new FormControl(this.subDevice?.service_type ?? 0),
       Notes: new FormControl(this.subDevice?.notes || ''),
       DeviceId: new FormControl(
         this.subDevice?.device_id || this.deviceId || '',

@@ -6,7 +6,7 @@
                 placeholder="Type to search..." (ngModelChange)="list(1)">
         </div>
         <div class="d-flex gap-2">
-            <!-- <div class="d-flex gap-2 align-items-center me-5">
+            <div class="d-flex gap-2 align-items-center me-5">
                 <button class="btn btn-sm" [ngClass]="isServiceTypeSelected(10) ? 'btn-success' : 'btn-outline-success'"
                     (click)="toggleServiceType(10)">
                     Mobadara ({{ serviceTypeCounts[10] }})
@@ -19,7 +19,11 @@
                     (click)="toggleServiceType(30)">
                     Base Station ({{ serviceTypeCounts[30] }})
                 </button>
-            </div> -->
+            </div>
+            <button class="btn btn-sm btn-outline-success" (click)="importExcel()" *hasPermission="PermissionCode.ADD_SUBDEVICE">
+                <i class="fe fe-upload me-3"></i>
+                <span>Import</span>
+            </button>
             <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_SUBDEVICE">
                 <i class="fe fe-plus me-3"></i>
                 <span>New Sub Device</span>
@@ -43,7 +47,7 @@
             <tbody *ngIf="!(httpService.getLoading('subDevicesList') | async) && totalRecords > 0">
                 <tr class="cursor-pointer"
                     *ngFor="let subDevice of subDevices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index"
-                    (click)="viewDetails(subDevice)">
+                    (click)="edit(subDevice)">
                     <td class="fw-bold">{{ subDevice?.name || '-' }}</td>
                     <td>{{ subDevice?.device?.name || '-' }}</td>
                     <td>
@@ -60,39 +64,9 @@
                         <span *ngIf="!subDevice?.management_ip">-</span>
                     </td>
                     <td (click)="$event.stopPropagation()">
-                        <div class="btn-group dropstart">
-                            <span data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fe fe-more-vertical black-menu fs-2"></i>
-                            </span>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" (click)="viewDetails(subDevice)">
-                                        <i class="fe fe-eye me-3"></i>View Details
-                                    </a>
-                                </li>
-                                <li *hasPermission="PermissionCode.EDIT_SUBDEVICE">
-                                    <a class="dropdown-item" (click)="edit(subDevice)">
-                                        <i class="fe fe-edit me-3"></i>Edit
-                                    </a>
-                                </li>
-                                <li *hasPermission="PermissionCode.VIEW_SUBDEVICES">
-                                    <a class="dropdown-item" (click)="pingIP(subDevice)"
-                                        [class.disabled]="!subDevice?.management_ip">
-                                        <i class="fe fe-activity text-success me-3"></i>
-                                        <span [class.text-muted]="!subDevice?.management_ip">Ping</span>
-                                    </a>
-                                </li>
-                                <li *hasPermission="PermissionCode.DELETE_SUBDEVICE">
-                                    <hr class="m-2">
-                                </li>
-                                <li *hasPermission="PermissionCode.DELETE_SUBDEVICE">
-                                    <a class="dropdown-item" (click)="delete(subDevice)">
-                                        <i class="fe fe-trash-2 text-danger me-3"></i>
-                                        <span class="text-danger">Delete</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <span (click)="toggleMenu($event, subDevice)">
+                            <i class="fe fe-more-vertical black-menu fs-2"></i>
+                        </span>
                     </td>
                 </tr>
             </tbody>
@@ -117,3 +91,30 @@
     <app-pagination [isLoading$]="httpService.getLoading('subDevicesList')" [totalRecords]="totalRecords" [size]="size"
         (pageChange)="list($event)"></app-pagination>
 </div>
+
+<!-- Row actions menu: rendered once, fixed to the viewport (never clipped by the table's scroll container) -->
+<ul class="dropdown-menu show" *ngIf="activeMenuSubDevice"
+    [style.position]="'fixed'" [style.top.px]="menuPosition.top" [style.left.px]="menuPosition.left"
+    (click)="$event.stopPropagation()">
+    <li>
+        <a class="dropdown-item" (click)="edit(activeMenuSubDevice); closeMenu()">
+            <i class="fe fe-edit me-3"></i>View / Edit
+        </a>
+    </li>
+    <li *hasPermission="PermissionCode.VIEW_SUBDEVICES">
+        <a class="dropdown-item" (click)="pingIP(activeMenuSubDevice); closeMenu()"
+            [class.disabled]="!activeMenuSubDevice?.management_ip">
+            <i class="fe fe-activity text-success me-3"></i>
+            <span [class.text-muted]="!activeMenuSubDevice?.management_ip">Ping</span>
+        </a>
+    </li>
+    <li *hasPermission="PermissionCode.DELETE_SUBDEVICE">
+        <hr class="m-2">
+    </li>
+    <li *hasPermission="PermissionCode.DELETE_SUBDEVICE">
+        <a class="dropdown-item" (click)="delete(activeMenuSubDevice); closeMenu()">
+            <i class="fe fe-trash-2 text-danger me-3"></i>
+            <span class="text-danger">Delete</span>
+        </a>
+    </li>
+</ul>
