@@ -3,7 +3,7 @@
     <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
 </div>
 
-<div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+<div class="modal-body pb-5" style="max-height: 70vh; overflow-y: auto;">
     <form [formGroup]="form">
         <div class="row">
             <!-- Basic Information -->
@@ -20,6 +20,21 @@
                 </div>
             </div>
 
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Station Name</label>
+                <input type="text" class="form-control" formControlName="StationName" placeholder="Enter station name">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Line Code</label>
+                <input type="text" class="form-control" formControlName="LineCode" placeholder="Enter line code">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Order Number</label>
+                <input type="text" class="form-control" formControlName="OrderNumber" placeholder="Enter order number">
+            </div>
+
             <!-- Device is already known from the route (deviceId), no need to pick it manually -->
             <!-- <div class="col-md-4 mb-3">
                 <label class="form-label">Device <span class="text-danger">*</span></label>
@@ -33,24 +48,9 @@
                 </div>
             </div> -->
 
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Service Type</label>
-                <select class="form-select" formControlName="ServiceType">
-                    <option [value]="0">None</option>
-                    <option [value]="10">Mobadara</option>
-                    <option [value]="20">PTP</option>
-                    <option [value]="30">Base Station</option>
-                </select>
-            </div>
-
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Line Code</label>
-                <input type="text" class="form-control" formControlName="LineCode" placeholder="Enter line code">
-            </div>
-
-            <!-- Network Information -->
+            <!-- Unit Information -->
             <div class="col-12 mb-3 mt-3">
-                <h5 class="text-muted border-bottom pb-1">Network Information</h5>
+                <h5 class="text-muted border-bottom pb-1">Unit Information</h5>
             </div>
 
             <div class="col-md-4 mb-3">
@@ -70,6 +70,36 @@
                     placeholder="00:00:00:00:00:00">
             </div>
 
+            <!-- Connection Information -->
+            <div class="col-12 mb-3 mt-3">
+                <h5 class="text-muted border-bottom pb-1">Connection Information</h5>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Connection Type</label>
+                <input type="text" class="form-control" formControlName="ConnectionType" placeholder="Enter connection type">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Service Type</label>
+                <select class="form-select" formControlName="ServiceType">
+                    <option [value]="0">None</option>
+                    <option [value]="10">Mobadara</option>
+                    <option [value]="20">PTP</option>
+                    <option [value]="30">Base Station</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Speed</label>
+                <input type="text" class="form-control" formControlName="Speed" placeholder="e.g. 100 Mbps">
+            </div>
+
+            <!-- Network Information -->
+            <div class="col-12 mb-3 mt-3">
+                <h5 class="text-muted border-bottom pb-1">Network Information</h5>
+            </div>
+
             <div class="col-md-4 mb-3">
                 <label class="form-label">Management IP</label>
                 <input type="text" class="form-control" formControlName="ManagementIp" placeholder="192.168.1.1">
@@ -80,53 +110,88 @@
                 <input type="text" class="form-control" formControlName="ManagementVlan" placeholder="e.g. 100">
             </div>
 
+            <div class="col-md-4 mb-3">
+                <label class="form-label">WAN IP</label>
+                <input type="text" class="form-control" formControlName="WanIp" placeholder="Enter WAN IP">
+            </div>
+
             <!-- Mikrotik Information -->
             <div class="col-12 mb-3 mt-3">
-                <h5 class="text-muted border-bottom pb-1">Mikrotik Information</h5>
+                <h5 class="text-muted border-bottom pb-1">MikroTik Information</h5>
             </div>
 
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Mikrotik ID</label>
-                <input type="text" class="form-control" formControlName="MikrotikId" placeholder="Enter Mikrotik ID">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">MikroTik ID</label>
+                <input type="text" class="form-control" formControlName="MikrotikId" placeholder="Enter MikroTik ID">
             </div>
 
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Mikrotik MAC Address</label>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">MikroTik MAC Address</label>
                 <input type="text" class="form-control" formControlName="MikrotikMacAddress"
                     placeholder="00:00:00:00:00:00">
             </div>
 
-            <!-- SAS & ODF Information -->
+            <!-- SAS Information -->
             <div class="col-12 mb-3 mt-3">
-                <h5 class="text-muted border-bottom pb-1">SAS & ODF Information</h5>
+                <h5 class="text-muted border-bottom pb-1">SAS Information</h5>
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
                 <label class="form-label">SAS Name</label>
                 <input type="text" class="form-control" formControlName="SasName" placeholder="Enter SAS name">
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
                 <label class="form-label">SAS Port</label>
-                <input type="text" class="form-control" formControlName="SasPort" placeholder="e.g. 1, 2, 3">
+                <input type="text" class="form-control" formControlName="SasPort" placeholder="Enter SAS port">
             </div>
 
-            <div class="col-md-4 mb-3">
+            <!-- ODF Information -->
+            <div class="col-12 mb-3 mt-3">
+                <h5 class="text-muted border-bottom pb-1">ODF Information</h5>
+            </div>
+
+            <div class="col-md-6 mb-3">
                 <label class="form-label">ODF Name</label>
                 <input type="text" class="form-control" formControlName="OdfName" placeholder="Enter ODF name">
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
                 <label class="form-label">ODF Port</label>
-                <input type="text" class="form-control" formControlName="OdfPort" placeholder="e.g. 1, 2, 3">
+                <input type="text" class="form-control" formControlName="OdfPort" placeholder="Enter ODF port">
             </div>
 
-            <!-- Notes -->
+            <!-- Customer and Contact Information -->
             <div class="col-12 mb-3 mt-3">
-                <label class="form-label">Notes</label>
-                <textarea class="form-control" formControlName="Notes" rows="3"
-                    placeholder="Enter any additional notes..."></textarea>
+                <h5 class="text-muted border-bottom pb-1">Customer and Contact Information</h5>
             </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Customer Address</label>
+                <input type="text" class="form-control" formControlName="CustomerAddress" placeholder="Enter customer address">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Contact Person</label>
+                <input type="text" class="form-control" formControlName="ContactPerson" placeholder="Enter contact person name">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Contact Person Phone No</label>
+                <input type="text" class="form-control" formControlName="ContactPersonPhoneNo" placeholder="Enter phone number">
+            </div>
+
+            <!-- Additional Information -->
+            <div class="col-12 mb-3 mt-3">
+                <h5 class="text-muted border-bottom pb-1">Additional Information</h5>
+            </div>
+
+            <div class="col-12 mb-3">
+                <label class="form-label">Other Details</label>
+                <textarea class="form-control" formControlName="OtherDetails" rows="3"
+                    placeholder="Enter other details"></textarea>
+            </div>
+
         </div>
     </form>
 </div>

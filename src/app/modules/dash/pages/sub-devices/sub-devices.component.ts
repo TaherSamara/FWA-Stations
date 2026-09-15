@@ -160,10 +160,10 @@ export class SubDevicesComponent {
     modalRef.componentInstance.type = 'subDevices';
     modalRef.componentInstance.deviceId = this.selectedDeviceId;
     modalRef.componentInstance.templateUrl =
-      'https://docs.google.com/spreadsheets/d/1gx8AvT4EtF7Q_89AujTJ_2LVyoH3posc_eLVcbqja9E/edit?usp=sharing';
+      'https://docs.google.com/spreadsheets/d/1JswRyT2jGyZ1broehD-fGkG-ZjfxozLyLMu6PVTgMDY/edit?usp=sharing';
     modalRef.result.then(
       () => this.list(1, false),
-      () => {},
+      () => { },
     );
   }
 

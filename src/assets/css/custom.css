@@ -94,7 +94,7 @@ ul {
 }
 
 .dropdown-menu {
-  padding: 8px;
+  padding: 0 8px;
   border-radius: 0.5rem;
   border: none;
   width: 220px;

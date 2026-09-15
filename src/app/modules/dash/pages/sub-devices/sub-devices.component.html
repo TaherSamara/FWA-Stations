@@ -20,7 +20,8 @@
                     Base Station ({{ serviceTypeCounts[30] }})
                 </button>
             </div>
-            <button class="btn btn-sm btn-outline-success" (click)="importExcel()" *hasPermission="PermissionCode.ADD_SUBDEVICE">
+            <button class="btn btn-sm btn-success" (click)="importExcel()"
+                *hasPermission="PermissionCode.ADD_SUBDEVICE">
                 <i class="fe fe-upload me-3"></i>
                 <span>Import</span>
             </button>
@@ -35,12 +36,16 @@
         <table class="table table-sm table-nowrap card-table table-hover table-striped">
             <thead>
                 <tr>
-                    <th class="w-12">Name</th>
+                    <th class="w-10">Name</th>
+                    <th class="w-10">Station</th>
                     <th class="w-10">Device</th>
-                    <th class="w-10">Service Type</th>
                     <th class="w-8">Line Code</th>
-                    <th class="w-8">Unit Type</th>
-                    <th class="w-10">Mgmt IP</th>
+                    <th class="w-9">Service Type</th>
+                    <th class="w-8">Connection</th>
+                    <th class="w-8">Speed</th>
+                    <th class="w-9">MGMT IP</th>
+                    <th class="w-8">WAN IP</th>
+                    <th class="w-9">Contact Person</th>
                     <th class="w-5">Actions</th>
                 </tr>
             </thead>
@@ -48,21 +53,34 @@
                 <tr class="cursor-pointer"
                     *ngFor="let subDevice of subDevices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index"
                     (click)="edit(subDevice)">
-                    <td class="fw-bold">{{ subDevice?.name || '-' }}</td>
-                    <td>{{ subDevice?.device?.name || '-' }}</td>
+                    <td class="fw-bold text-truncate" style="max-width: 160px;" [title]="subDevice?.name || ''">{{
+                        subDevice?.name || '—' }}</td>
+                    <td class="text-truncate" style="max-width: 140px;" [title]="subDevice?.station_name || ''">{{
+                        subDevice?.station_name || '—' }}</td>
+                    <td class="text-truncate" style="max-width: 140px;" [title]="subDevice?.device?.name || ''">{{
+                        subDevice?.device?.name || '—' }}</td>
+                    <td class="text-truncate" style="max-width: 120px;" [title]="subDevice?.line_code || ''">{{
+                        subDevice?.line_code || '—' }}</td>
                     <td>
-                        <span class="badge bg-primary-soft text-primary">{{ getServiceTypeName(subDevice?.service_type) }}</span>
+                        <span class="badge bg-primary-soft text-primary">{{ getServiceTypeName(subDevice?.service_type)
+                            }}</span>
                     </td>
-                    <td>{{ subDevice?.line_code || '-' }}</td>
-                    <td>{{ subDevice?.unit_type || '-' }}</td>
+                    <td class="text-truncate" style="max-width: 120px;" [title]="subDevice?.connection_type || ''">{{
+                        subDevice?.connection_type || '—' }}</td>
+                    <td class="text-truncate" style="max-width: 100px;" [title]="subDevice?.speed || ''">{{
+                        subDevice?.speed || '—' }}</td>
                     <td (click)="$event.stopPropagation()">
-                        <a *ngIf="subDevice?.management_ip" [href]="'http://' + subDevice.management_ip"
-                            target="_blank" class="text-primary text-decoration-none" title="Open in new tab">
+                        <a *ngIf="subDevice?.management_ip" [href]="'http://' + subDevice.management_ip" target="_blank"
+                            class="text-primary text-decoration-none" title="Open in new tab">
                             {{ subDevice.management_ip }}
                             <i class="fe fe-external-link ms-1 small"></i>
                         </a>
-                        <span *ngIf="!subDevice?.management_ip">-</span>
+                        <span *ngIf="!subDevice?.management_ip">—</span>
                     </td>
+                    <td class="text-truncate" style="max-width: 120px;" [title]="subDevice?.wan_ip || ''">{{
+                        subDevice?.wan_ip || '—' }}</td>
+                    <td class="text-truncate" style="max-width: 140px;" [title]="subDevice?.contact_person || ''">{{
+                        subDevice?.contact_person || '—' }}</td>
                     <td (click)="$event.stopPropagation()">
                         <span (click)="toggleMenu($event, subDevice)">
                             <i class="fe fe-more-vertical black-menu fs-2"></i>
@@ -74,7 +92,7 @@
             <!-- loading -->
             <tbody *ngIf="(httpService.getLoading('subDevicesList') | async)">
                 <tr *ngFor="let number of [].constructor(+size+1)">
-                    <td style="padding: 19.9px;" *ngFor="let number of [].constructor(+7)">
+                    <td style="padding: 19.9px;" *ngFor="let number of [].constructor(+11)">
                         <ngx-skeleton-loader appearance="line" animation="progress-dark"
                             [theme]="{width:'70%',height:'23.5px','border-radius':'3px','margin':'0'}"></ngx-skeleton-loader>
                     </td>
@@ -93,9 +111,8 @@
 </div>
 
 <!-- Row actions menu: rendered once, fixed to the viewport (never clipped by the table's scroll container) -->
-<ul class="dropdown-menu show" *ngIf="activeMenuSubDevice"
-    [style.position]="'fixed'" [style.top.px]="menuPosition.top" [style.left.px]="menuPosition.left"
-    (click)="$event.stopPropagation()">
+<ul class="dropdown-menu show" *ngIf="activeMenuSubDevice" [style.position]="'fixed'" [style.top.px]="menuPosition.top"
+    [style.left.px]="menuPosition.left" (click)="$event.stopPropagation()">
     <li>
         <a class="dropdown-item" (click)="edit(activeMenuSubDevice); closeMenu()">
             <i class="fe fe-edit me-3"></i>View / Edit
