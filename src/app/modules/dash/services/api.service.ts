@@ -22,6 +22,10 @@ export class ApiService {
     add: API_BASE_URL + 'Devices/add',
     edit: (id: number) => API_BASE_URL + 'Devices/edit/' + id,
     delete: (id: number) => API_BASE_URL + 'Devices/delete/' + id,
+    import: (device_type: number) =>
+      API_BASE_URL + 'Devices/import?device_type=' + device_type,
+    export: (device_id: number) =>
+      API_BASE_URL + 'Devices/export/' + device_id,
   };
 
   // Sub Devices Management
@@ -31,8 +35,6 @@ export class ApiService {
     edit: (id: number) => API_BASE_URL + 'SubDevices/edit/' + id,
     delete: (id: number) => API_BASE_URL + 'SubDevices/delete/' + id,
     ping: (ip: string) => API_BASE_URL + 'SubDevices/ping/' + ip,
-    import: (device_id: number) =>
-      API_BASE_URL + 'SubDevices/import/' + device_id,
   };
 
   // Warehouse Management

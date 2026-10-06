@@ -9,7 +9,6 @@ import { HttpService } from '../../services/http.service';
 import { PublicService } from '../../services/public.service';
 import { ToastrsService } from '../../services/toater.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
-import { ImportComponent } from '../../shared/import/import.component';
 import { PingComponent } from '../../shared/ping/ping.component';
 import { AddEditSubDevicesComponent } from './add-edit/add-edit.component';
 
@@ -24,8 +23,6 @@ export class SubDevicesComponent {
   searchText: string = '';
   selectedDeviceId: number = 0;
   selectedDeviceType: DeviceType;
-  selectedServiceType: number | null = null; // null = all service types
-  serviceTypeCounts: any = { 10: 0, 20: 0, 30: 0 }; // Counts for each service type
   page: number = 1;
   size: number = 10;
   totalCount: number;
@@ -88,11 +85,6 @@ export class SubDevicesComponent {
       params = params.set('device_id', this.selectedDeviceId);
     }
 
-    // Add service type filter
-    if (this.selectedServiceType !== null) {
-      params = params.set('service_type', this.selectedServiceType);
-    }
-
     this.httpService
       .list(
         this.api.subDevices.list,
@@ -105,66 +97,11 @@ export class SubDevicesComponent {
             this.subDevices = res.data.data;
             this.totalCount = res.data.total_count;
             this.totalRecords = res.data.total_records;
-            this.updateServiceTypeCounts();
           } else {
             this.toastrsService.Showerror(res.msg);
           }
         },
       });
-  }
-
-  toggleServiceType(type: number): void {
-    this.selectedServiceType = this.selectedServiceType === type ? null : type;
-    this.list(1);
-  }
-
-  isServiceTypeSelected(type: number): boolean {
-    return this.selectedServiceType === type;
-  }
-
-  updateServiceTypeCounts(): void {
-    // Get counts from all sub devices (without filter)
-    let params = new HttpParams()
-      .set('q', this.searchText)
-      .set('size', 1000)
-      .set('page', 1);
-
-    if (this.selectedDeviceId > 0) {
-      params = params.set('device_id', this.selectedDeviceId);
-    }
-
-    this.httpService
-      .list(this.api.subDevices.list, { params }, 'countsLoading')
-      .subscribe({
-        next: (res: any) => {
-          if (res.success) {
-            const allSubDevices = res.data.data;
-            this.serviceTypeCounts = {
-              10: allSubDevices.filter((s: any) => s.service_type === 10)
-                .length,
-              20: allSubDevices.filter((s: any) => s.service_type === 20)
-                .length,
-              30: allSubDevices.filter((s: any) => s.service_type === 30)
-                .length,
-            };
-          }
-        },
-      });
-  }
-
-  importExcel() {
-    const modalRef = this.modalService.open(ImportComponent, {
-      size: 'md',
-      centered: true,
-    });
-    modalRef.componentInstance.type = 'subDevices';
-    modalRef.componentInstance.deviceId = this.selectedDeviceId;
-    modalRef.componentInstance.templateUrl =
-      'https://docs.google.com/spreadsheets/d/1JswRyT2jGyZ1broehD-fGkG-ZjfxozLyLMu6PVTgMDY/edit?usp=sharing';
-    modalRef.result.then(
-      () => this.list(1, false),
-      () => { },
-    );
   }
 
   add() {
@@ -193,16 +130,6 @@ export class SubDevicesComponent {
     modalRef.componentInstance.type = 'subDevice';
     modalRef.componentInstance.message = `Do you want to delete ${subDevice.name}?`;
     modalRef.result.then(() => this.list(1, false));
-  }
-
-  getServiceTypeName(type: number): string {
-    const types: any = {
-      0: 'None',
-      10: 'Mobadara',
-      20: 'PTP',
-      30: 'Base Station',
-    };
-    return types[type] ?? 'Unknown';
   }
 
   pingIP(subDevice: any) {

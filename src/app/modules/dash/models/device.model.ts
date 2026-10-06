@@ -14,6 +14,8 @@ export enum DeviceType {
   Router = 50,
   SAS = 60,
   Station = 70,
+  PTP = 80,
+  Mobadara = 90,
 }
 
 export interface DeviceTypeTab {
@@ -31,6 +33,8 @@ export const DEVICE_TYPE_TABS: DeviceTypeTab[] = [
   { type: DeviceType.Router, slug: 'router', label: 'Router', icon: 'fe-share-2' },
   { type: DeviceType.SAS, slug: 'sas', label: 'SAS', icon: 'fe-database' },
   { type: DeviceType.Station, slug: 'station', label: 'Station', icon: 'fe-radio' },
+  { type: DeviceType.PTP, slug: 'ptp', label: 'PTP', icon: 'fe-link' },
+  { type: DeviceType.Mobadara, slug: 'mobadara', label: 'Mobadara', icon: 'fe-cpu' },
 ];
 
 export function getDeviceTypeTab(type: DeviceType): DeviceTypeTab | undefined {

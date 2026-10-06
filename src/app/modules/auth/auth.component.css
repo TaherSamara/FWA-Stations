@@ -1,3 +1,27 @@
 img {
     mix-blend-mode: multiply;
 }
+
+.auth-page {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    background: linear-gradient(135deg, #f8faf7 0%, #e9f1e4 100%);
+}
+
+.auth-page::before {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    aspect-ratio: 1920 / 380;
+    background: url('/assets/img/bg.svg') bottom center / 100% 100% no-repeat;
+    content: '';
+    pointer-events: none;
+}
+
+.auth-content {
+    position: relative;
+    z-index: 1;
+    transform: translateY(-1.5rem);
+}

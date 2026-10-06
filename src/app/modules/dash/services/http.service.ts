@@ -55,4 +55,17 @@ export class HttpService {
             })
         );
     }
+
+    download(url: string, field?: string): Observable<Blob> {
+        if (field) {
+            this.setLoading(field, true);
+        }
+        return this.http.get(url, { responseType: 'blob' }).pipe(
+            tap({
+                next: (res: any) => res,
+                error: (err: any) => err,
+                finalize: () => field && this.setLoading(field, false)
+            })
+        );
+    }
 }

@@ -47,30 +47,24 @@
             </a>
           </li>
         </ng-container>
-        <!-- <li class="nav-item" *hasPermission="PermissionCode.VIEW_SUBDEVICES">
-          <a class="nav-link" routerLinkActive="active" routerLink="/sub-devices">
-            <i class="fe fe-radio"></i>
-            <span>Sub Devices</span>
-          </a>
-        </li> -->
-        <li class="nav-item" *hasPermission="[PermissionCode.VIEW_ALL_WAREHOUSE_DEVICES, PermissionCode.VIEW_MY_WAREHOUSE_DEVICES]">
+        <!-- <li class="nav-item" *hasPermission="[PermissionCode.VIEW_ALL_WAREHOUSE_DEVICES, PermissionCode.VIEW_MY_WAREHOUSE_DEVICES]">
           <a class="nav-link" routerLinkActive="active" routerLink="/warehouse">
             <i class="fe fe-package"></i>
             <span>Warehouse</span>
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
 
     <!-- Search Bar -->
-    <div class="navbar-search mx-3 d-none d-md-flex">
+    <!-- <div class="navbar-search mx-3 d-none d-md-flex">
       <div class="position-relative">
         <input type="text" class="form-control search-input" placeholder="Search..." [(ngModel)]="searchQuery"
           (input)="onSearchInput($event)" (keyup)="onSearchKeyup($event)" />
         <i class="fe fe-search search-icon"></i>
         <i *ngIf="searchQuery" class="fe fe-x clear-icon" (click)="clearSearch()" role="button"></i>
       </div>
-    </div>
+    </div> -->
 
     <div class="navbar-user d-none d-md-flex">
       <div class="avatar avatar-sm">

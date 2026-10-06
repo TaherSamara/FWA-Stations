@@ -10,6 +10,9 @@
             <a *ngIf="templateUrl" [href]="templateUrl" target="_blank" class="small">
                 <i class="fe fe-external-link me-1"></i>Open Template
             </a>
+            <a *ngIf="!templateUrl && type === 'subDevices'" (click)="downloadTemplate()" class="small" role="button">
+                <i class="fe fe-download me-1"></i>Download Template
+            </a>
         </div>
         <input type="file" class="form-control" accept=".xlsx,.xls" (change)="onFileSelected($event)"
             [class.is-invalid]="submitted && !selectedFile">

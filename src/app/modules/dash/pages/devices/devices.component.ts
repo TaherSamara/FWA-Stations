@@ -2,6 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as FileSaver from 'file-saver';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { DeviceType, getDeviceTypeTab, PermissionCode } from 'src/app/modules/dash/models';
 import { ApiService } from '../../services/api.service';
@@ -9,6 +10,7 @@ import { HttpService } from '../../services/http.service';
 import { PublicService } from '../../services/public.service';
 import { ToastrsService } from '../../services/toater.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
+import { ImportComponent } from '../../shared/import/import.component';
 import { AddEditDevicesComponent } from './add-edit/add-edit.component';
 
 @Component({
@@ -82,6 +84,19 @@ export class DevicesComponent {
     modalRef.result.then(() => this.list(1, false));
   }
 
+  importExcel() {
+    const modalRef = this.modalService.open(ImportComponent, {
+      size: 'md',
+      centered: true,
+    });
+    modalRef.componentInstance.type = 'subDevices';
+    modalRef.componentInstance.deviceType = this.deviceType;
+    modalRef.result.then(
+      () => this.list(1, false),
+      () => { },
+    );
+  }
+
   edit(device: any) {
     const modalRef = this.modalService.open(AddEditDevicesComponent, {
       size: 'md',
@@ -89,6 +104,19 @@ export class DevicesComponent {
     });
     modalRef.componentInstance.device = device;
     modalRef.result.then(() => this.list(1, false));
+  }
+
+  exportExcel(device: any) {
+    this.httpService
+      .download(this.api.devices.export(device.id), 'exportAction')
+      .subscribe({
+        next: (blob: Blob) => {
+          FileSaver.saveAs(blob, `${device.name}-sub-devices.xlsx`);
+        },
+        error: () => {
+          this.toastrsService.Showerror('Failed to export sub devices');
+        },
+      });
   }
 
   delete(device: any) {

@@ -6,6 +6,11 @@
                 placeholder="Type to search..." (ngModelChange)="list(1)">
         </div>
         <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-success" (click)="importExcel()"
+                *hasPermission="PermissionCode.IMPORT_DEVICES">
+                <i class="fe fe-upload me-3"></i>
+                <span>Import</span>
+            </button>
             <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_DEVICE">
                 <i class="fe fe-plus me-3"></i>
                 <span>New Device</span>
@@ -18,7 +23,7 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
                 *ngFor="let device of devices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index">
                 <div class="card device-card m-0">
-                    <div class="card-body text-center p-3" (click)="viewSubDevices(device)" style="cursor: pointer;">
+                    <div class="card-body text-center p-3">
                         <div class="mb-3">
                             <div class="device-icon mb-3">
                                 <i class="fe fe-radio fs-1 text-primary"></i>
@@ -27,19 +32,22 @@
                         </div>
                     </div>
                     <div class="card-footer bg-white border-top p-3" (click)="$event.stopPropagation()">
-                        <div class="d-flex gap-3">
-                            <button class="btn btn-sm btn-primary flex-fill flex-grow-2"
-                                (click)="viewSubDevices(device)" title="View Sub Devices"
-                                *hasPermission="PermissionCode.VIEW_SUBDEVICES">
-                                <i class="fe fe-users me-1"></i>
-                                <small>View Device</small>
-                            </button>
-                            <button class="btn btn-sm btn-outline-primary flex-fill" (click)="edit(device)" title="Edit"
+                        <button class="btn btn-sm btn-primary w-100 mb-2" (click)="viewSubDevices(device)"
+                            *hasPermission="PermissionCode.VIEW_SUBDEVICES">
+                            <i class="fe fe-users me-1"></i>
+                            <small>View Device</small>
+                        </button>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-primary flex-fill" (click)="edit(device)"
                                 *hasPermission="PermissionCode.EDIT_DEVICE">
                                 <i class="fe fe-edit"></i>
                             </button>
+                            <button class="btn btn-sm btn-outline-success flex-fill" (click)="exportExcel(device)"
+                                *hasPermission="PermissionCode.EXPORT_DEVICES">
+                                <i class="fe fe-download"></i>
+                            </button>
                             <button class="btn btn-sm btn-outline-danger flex-fill" (click)="delete(device)"
-                                title="Delete" *hasPermission="PermissionCode.DELETE_DEVICE">
+                                *hasPermission="PermissionCode.DELETE_DEVICE">
                                 <i class="fe fe-trash-2"></i>
                             </button>
                         </div>
@@ -50,7 +58,7 @@
 
         <div class="row g-3" *ngIf="(httpService.getLoading('devicesList') | async)">
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let number of [].constructor(+size)">
-                <div class="card device-card m-0">
+                <div class="card device-card is-loading m-0">
                     <div class="card-body text-center p-3">
                         <div class="mb-3">
                             <div class="device-icon mb-3">
@@ -63,7 +71,9 @@
                     </div>
                     <div class="card-footer bg-white border-top p-3">
                         <ngx-skeleton-loader appearance="line" animation="progress-dark"
-                            [theme]="{width:'100%',height:'32px','border-radius':'3px','margin':'0'}"></ngx-skeleton-loader>
+                            [theme]="{width:'100%',height:'32px','border-radius':'6px','margin':'0 0 8px 0'}"></ngx-skeleton-loader>
+                        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+                            [theme]="{width:'100%',height:'32px','border-radius':'6px','margin':'0'}"></ngx-skeleton-loader>
                     </div>
                 </div>
             </div>
