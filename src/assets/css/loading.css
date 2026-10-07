@@ -1,148 +1,114 @@
+/* Same background as the login page */
 .modal-loading {
+  position: relative;
   height: 100vh;
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url("../img/svgviewer-output.svg");
-  background-size: cover;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8faf7 0%, #e9f1e4 100%);
 }
 
+/* Network loader: a hub broadcasting a signal, with nodes orbiting it */
 .loader {
   position: relative;
-  width: 130px;
-  height: 100px;
-  background-repeat: no-repeat;
-  background-image:
-    linear-gradient(rgb(118, 188, 33), rgb(118, 188, 33)),
-    linear-gradient(rgb(168, 218, 103), rgb(205, 235, 176)),
-    linear-gradient(rgb(168, 218, 103), rgb(205, 235, 176));
-  background-size:
-    80px 70px,
-    30px 50px,
-    30px 30px;
-  background-position:
-    0 0,
-    80px 20px,
-    100px 40px;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
 }
 
-.loader:after {
-  content: "";
+.loader .hub {
   position: absolute;
-  bottom: 10px;
-  left: 12px;
-  width: 10px;
-  height: 10px;
-  background: #fff;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
   border-radius: 50%;
-  box-sizing: content-box;
-  border: 10px solid #000;
-  box-shadow:
-    78px 0 0 -10px #fff,
-    78px 0 #000;
-  animation: wheelSk 0.75s ease-in infinite alternate;
+  background: rgb(118, 188, 33);
+  box-shadow: 0 0 0 4px rgba(118, 188, 33, 0.2);
+  animation: hubPulse 1.6s ease-in-out infinite;
 }
 
-.loader:before {
-  content: "";
+/* Expanding signal waves */
+.loader .wave {
   position: absolute;
-  right: 100%;
-  top: 0px;
-  height: 70px;
-  width: 70px;
-  background-image:
-    linear-gradient(rgb(118, 188, 33) 45px, transparent 0),
-    linear-gradient(rgb(118, 188, 33) 45px, transparent 0),
-    linear-gradient(rgb(118, 188, 33) 45px, transparent 0);
-  background-repeat: no-repeat;
-  background-size: 30px 4px;
-  background-position:
-    0px 11px,
-    8px 35px,
-    0px 60px;
-  animation: lineDropping 0.75s linear infinite;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 2px solid rgb(118, 188, 33);
+  border-radius: 50%;
+  opacity: 0;
+  animation: wave 2.4s ease-out infinite;
 }
 
-@keyframes wheelSk {
-  0%,
-  50%,
-  100% {
-    transform: translatey(0);
-  }
+.loader .wave:nth-of-type(2) {
+  animation-delay: 0.8s;
+}
 
-  30%,
-  90% {
-    transform: translatey(-3px);
+.loader .wave:nth-of-type(3) {
+  animation-delay: 1.6s;
+}
+
+/* Rotating ring with 3 nodes; each node is linked to the hub by a line */
+.loader .orbit {
+  position: absolute;
+  inset: 0;
+  animation: spin 4s linear infinite;
+}
+
+.loader .node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid rgb(118, 188, 33);
+  transform: rotate(var(--a)) translateY(-48px);
+}
+
+.loader .node::before {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 2px;
+  height: 31px;
+  margin-left: -1px;
+  background: linear-gradient(rgba(118, 188, 33, 0.7), rgba(118, 188, 33, 0));
+  content: "";
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@keyframes lineDropping {
+@keyframes wave {
   0% {
-    background-position:
-      100px 11px,
-      115px 35px,
-      105px 60px;
-    opacity: 1;
+    transform: scale(1);
+    opacity: 0.7;
   }
 
-  50% {
-    background-position:
-      0px 11px,
-      20px 35px,
-      5px 60px;
-  }
-
-  60% {
-    background-position:
-      -30px 11px,
-      0px 35px,
-      -10px 60px;
-  }
-
-  75%,
   100% {
-    background-position:
-      -30px 11px,
-      -30px 35px,
-      -30px 60px;
+    transform: scale(5);
     opacity: 0;
   }
 }
 
-.loader-trail {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 130px;
-  height: 100px;
-  overflow: hidden;
-  z-index: -1;
-}
-
-.loader-trail::before,
-.loader-trail::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 130px;
-  height: 4px;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent);
-  animation: trail 1s linear infinite;
-}
-
-.loader-trail::after {
-  top: auto;
-  bottom: 50%;
-}
-
-@keyframes trail {
-  0% {
-    transform: translateX(130px);
+@keyframes hubPulse {
+  0%,
+  100% {
+    transform: scale(1);
   }
 
-  100% {
-    transform: translateX(-130px);
+  50% {
+    transform: scale(1.2);
   }
 }

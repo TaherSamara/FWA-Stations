@@ -1,0 +1,52 @@
+<div class="body auth-page d-flex align-items-center justify-content-center">
+  <div class="container auth-content">
+    <div class="row">
+      <div class="col-12 col-md-6 order-md-2 d-flex align-items-center justify-content-center mb-5 mb-md-0">
+        <svg class="network" viewBox="0 0 400 400" role="img" aria-label="Network">
+          <!-- links -->
+          <g class="links">
+            <line *ngFor="let n of nodes" x1="200" y1="200" [attr.x2]="n.x" [attr.y2]="n.y"></line>
+            <line [attr.x1]="nodes[0].x" [attr.y1]="nodes[0].y" [attr.x2]="nodes[1].x" [attr.y2]="nodes[1].y"></line>
+            <line [attr.x1]="nodes[2].x" [attr.y1]="nodes[2].y" [attr.x2]="nodes[3].x" [attr.y2]="nodes[3].y"></line>
+            <line [attr.x1]="nodes[4].x" [attr.y1]="nodes[4].y" [attr.x2]="nodes[5].x" [attr.y2]="nodes[5].y"></line>
+          </g>
+
+          <!-- data packets travelling hub -> node -->
+          <g class="packets">
+            <circle *ngFor="let n of nodes" r="3.5">
+              <animateMotion dur="2.6s" repeatCount="indefinite" [attr.begin]="n.d + 's'"
+                [attr.path]="'M200,200 L' + n.x + ',' + n.y"></animateMotion>
+            </circle>
+          </g>
+
+          <!-- signal waves -->
+          <g class="waves">
+            <circle cx="200" cy="200" r="30"></circle>
+            <circle cx="200" cy="200" r="30"></circle>
+            <circle cx="200" cy="200" r="30"></circle>
+          </g>
+
+          <!-- nodes -->
+          <g class="nodes">
+            <g *ngFor="let n of nodes" [attr.transform]="'translate(' + n.x + ' ' + n.y + ')'">
+              <circle class="node-halo" r="16" [style.animation-delay]="n.d + 's'"></circle>
+              <circle class="node" r="9"></circle>
+            </g>
+          </g>
+
+          <!-- hub -->
+          <g class="hub">
+            <circle r="30" cx="200" cy="200" class="hub-halo"></circle>
+            <circle r="20" cx="200" cy="200" class="hub-core"></circle>
+            <circle r="6" cx="200" cy="200" fill="#fff"></circle>
+          </g>
+        </svg>
+      </div>
+      <div class="col-12 offset-md-1 col-md-5 order-md-1 d-flex align-items-center">
+        <div class="w-100">
+          <ng-content></ng-content>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

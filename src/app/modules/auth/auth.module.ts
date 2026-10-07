@@ -8,12 +8,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ForgetComponent } from './components/forget/forget.component';
 import { ResetComponent } from './components/reset/reset.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { LottieModule } from 'ngx-lottie';
-import player from 'lottie-web';
-
-export function playerFactory() {
-  return player;
-}
+import { AuthLayoutModule } from 'src/app/common/auth-layout/auth-layout.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +24,7 @@ export function playerFactory() {
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    LottieModule.forRoot({ player: playerFactory })
+    AuthLayoutModule,
   ],
 })
 export class AuthModule {}

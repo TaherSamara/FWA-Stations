@@ -6,12 +6,7 @@ import { Error404Component } from './error404/error404.component';
 import { Error500Component } from './error500/error500.component';
 import { Error503Component } from './error503/error503.component';
 import { Error403Component } from './error403/error403.component';
-import { LottieModule } from 'ngx-lottie';
-import player from 'lottie-web';
-
-export function playerFactory() {
-  return player;
-}
+import { AuthLayoutModule } from 'src/app/common/auth-layout/auth-layout.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +19,7 @@ export function playerFactory() {
   imports: [
     CommonModule,
     ErrorRoutingModule,
-    LottieModule.forRoot({ player: playerFactory }),
+    AuthLayoutModule,
   ],
 })
 export class ErrorModule {}

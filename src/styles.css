@@ -2,3 +2,9 @@
 .modal-image .modal-content {
     background-color: rgba(255, 255, 255, 0.3);
 }
+/* All modals: rounded corners */
+.modal-content {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+

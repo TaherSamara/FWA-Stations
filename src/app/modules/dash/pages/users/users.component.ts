@@ -1,10 +1,11 @@
 import { HttpParams } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { PermissionCode } from 'src/app/modules/dash/models';
 import { ApiService } from '../../services/api.service';
 import { HttpService } from '../../services/http.service';
+import { PermissionsService } from '../../services/permissions.service';
 import { PublicService } from '../../services/public.service';
 import { ToastrsService } from '../../services/toater.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
@@ -25,6 +26,8 @@ export class UsersComponent {
 
   // Permissions
   PermissionCode = PermissionCode;
+  hoveredCategory: any = null;
+  popPosition = { top: 0, left: 0 };
 
   constructor(
     public httpService: HttpService,
@@ -33,6 +36,7 @@ export class UsersComponent {
     private toastrsService: ToastrsService,
     private modalService: NgbModal,
     public authService: AuthService,
+    private permissionsService: PermissionsService,
   ) {
     this.size = this.publicService.getNumOfRows(290, 70.57);
   }
@@ -54,6 +58,10 @@ export class UsersComponent {
         next: (res: any) => {
           if (res.success) {
             this.users = res.data.data;
+            // Computed once so the chips keep a stable identity (needed for hover)
+            this.users.forEach((u: any) => {
+              u.permission_groups = this.getPermissionsByCategory(u.permissions);
+            });
             this.totalCount = res.data.total_count;
             this.totalRecords = res.data.total_records;
           } else {
@@ -119,7 +127,29 @@ export class UsersComponent {
       grouped[category].permissions.push(perm);
     });
 
-    return Object.values(grouped);
+    return Object.keys(grouped)
+      .sort(
+        (a, b) =>
+          this.permissionsService.categoryOrder(a) -
+          this.permissionsService.categoryOrder(b),
+      )
+      .map((key) => grouped[key]);
+  }
+
+  // Hover details
+  showPerms(event: MouseEvent, category: any): void {
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    this.popPosition = { top: rect.bottom + 6, left: rect.left };
+    this.hoveredCategory = category;
+  }
+
+  hidePerms(): void {
+    this.hoveredCategory = null;
+  }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.hidePerms();
   }
 
   // Format category name for display
@@ -127,7 +157,8 @@ export class UsersComponent {
     if (!category) return 'Other';
 
     // Convert "USERS" to "Users", "STATIONS" to "Stations", etc.
-    return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+    const text = category.replace(/_/g, ' ').toLowerCase();
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 
   // Get tooltip with permission details

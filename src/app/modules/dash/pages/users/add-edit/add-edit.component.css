@@ -1,140 +1,186 @@
-/* Add Edit Users Component Styles */
-
-.user-info-section {
-  border-bottom: 1px solid #e9ecef;
-  padding-bottom: 20px;
+/* Same look as the sub device modals */
+.min-w-0 {
+  min-width: 0;
 }
 
-.permissions-section {
-  padding-top: 10px;
+.edit-header {
+  background: linear-gradient(135deg, #f1f8e9 0%, #ffffff 100%);
+  border-bottom: 1px solid #e3e6f0;
 }
 
-.permissions-container {
-  max-height: 400px;
+.edit-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #76bc21;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.edit-body {
+  padding: 15px;
+  max-height: 75vh;
   overflow-y: auto;
-  padding-right: 8px;
+  background: #f8f9fa;
+  scrollbar-width: thin;
+  scrollbar-color: #c5cad3 transparent;
 }
 
-.permissions-container::-webkit-scrollbar {
+.edit-body::-webkit-scrollbar {
   width: 6px;
 }
 
-.permissions-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
+.edit-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.edit-body::-webkit-scrollbar-thumb {
+  background: #c5cad3;
+  border-radius: 999px;
+}
+
+.edit-body::-webkit-scrollbar-thumb:hover {
+  background: #76bc21;
+}
+
+.edit-section {
+  background: #fff;
+  border: 1px solid #e3e6f0;
   border-radius: 10px;
+  padding: 0.9rem 1rem 1rem;
 }
 
-.permissions-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
+.edit-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #76bc21;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px solid #eef0f4;
 }
 
-.permissions-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
+.edit-section .form-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #8a94a6;
+  margin-bottom: 0.25rem;
 }
 
+.selected-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #6e7b8c;
+  background: #f1f8e9;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+/* Permission categories */
 .permission-category {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 14px;
-  border: 1px solid #e9ecef;
   height: 100%;
+  border: 1px solid #eef0f4;
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  background: #fcfcfd;
 }
 
 .category-header {
-  border-bottom: 2px solid var(--bs-primary);
-  padding-bottom: 8px;
-  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px dashed #e3e6f0;
 }
 
-.category-header h5 {
-  font-size: 0.95rem;
-  letter-spacing: 0.3px;
+.category-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.category-count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8a94a6;
 }
 
 .category-header .form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0;
-  margin: 0;
 }
 
-.category-header .category-checkbox {
-  width: 15px;
-  height: 15px;
+.category-header .form-check-input {
+  margin: 0;
+  float: none;
   cursor: pointer;
 }
 
 .category-header .form-check-label {
+  font-size: 0.78rem;
+  color: #6e7b8c;
   cursor: pointer;
-  font-weight: 500;
-  color: #6c757d;
-  font-size: 0.85rem;
 }
 
 .permission-items {
-  /* Removed flex properties since we're using Bootstrap grid now */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.1rem 0.75rem;
 }
 
 .permission-items .form-check {
-  padding: 8px 10px;
-  background-color: #ffffff;
-  border-radius: 6px;
-  transition: all 0.2s;
-  border: 1px solid #e9ecef;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 0;
+  margin: 0;
+  padding: 0.25rem 0.35rem;
+  border-radius: 6px;
 }
 
 .permission-items .form-check:hover {
-  background-color: #f4f9ec;
-  border-color: var(--bs-primary);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(var(--bs-primary-rgb), 0.15);
+  background: #f1f8e9;
 }
 
 .permission-items .form-check-input {
-  cursor: pointer;
-  width: 16px;
-  height: 16px;
-  margin-top: 0;
+  margin: 0;
+  float: none;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .permission-items .form-check-label {
   cursor: pointer;
-  margin-left: 8px;
-  font-size: 0.85rem;
-  flex: 1;
-  line-height: 1.3;
-}
-
-.permission-items .permission-name {
-  font-weight: 500;
-  color: #212529;
-}
-
-.permission-items .text-muted {
-  font-size: 0.78rem;
-  margin-top: 2px;
-}
-
-.permission-name {
-  font-weight: 500;
+  font-size: 0.82rem;
   color: #2c3e50;
-  font-size: 0.9rem;
+  line-height: 1.25;
+  min-width: 0;
 }
 
-/* Use the exact same brand color as the top navbar / rest of the app (--bs-primary, overridden in custom.css) instead of Bootstrap's default blue */
-.permissions-section .form-check-input:checked {
+@media (max-width: 575.98px) {
+  .permission-items {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Brand color for checked controls */
+.edit-section .form-check-input:checked {
   background-color: var(--bs-primary);
   border-color: var(--bs-primary);
 }
 
-.permissions-section .form-check-input:focus {
+.edit-section .form-check-input:focus {
   border-color: var(--bs-primary);
   box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
-}
-
-.permissions-section .form-check-input[type='checkbox']:indeterminate {
-  background-color: var(--bs-primary);
-  border-color: var(--bs-primary);
 }

@@ -1,11 +1,30 @@
 <div class="card">
-    <div class="card-header">
-        <div class="d-flex align-items-center input-group-merge input-group-flush input-group position-relative">
-            <i class="fe fe-search text-muted position-absolute me-3"></i>
-            <input [disabled]="totalCount == 0" [(ngModel)]="searchText" class="form-control m-0 ps-4"
-                placeholder="Type to search..." (ngModelChange)="list(1)">
+    <div class="card-header sub-devices-header">
+        <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+            <button type="button" class="btn btn-sm btn-light back-btn" (click)="goBack()" title="Back to devices">
+                <i class="fe fe-arrow-left me-2"></i>Back
+            </button>
+
+            <div class="device-title d-flex align-items-center gap-2" *ngIf="selectedDevice?.name">
+                <span class="device-title-icon"><i class="fe fe-radio"></i></span>
+                <h5 class="mb-0 fw-bold text-truncate" [title]="selectedDevice.name">{{ selectedDevice.name }}</h5>
+            </div>
+
+            <div
+                class="search-box d-flex align-items-center input-group-merge input-group-flush input-group position-relative">
+                <i class="fe fe-search text-muted position-absolute me-3"></i>
+                <input [disabled]="totalCount == 0 && !searchText" [(ngModel)]="searchText"
+                    class="form-control m-0 ps-4" placeholder="Type to search..." (ngModelChange)="list(1)">
+            </div>
         </div>
         <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-success" (click)="printAll()" *ngIf="selectedDeviceId > 0"
+                [disabled]="(httpService.getLoading('printAction') | async) || totalRecords == 0">
+                <span class="spinner-border spinner-border-sm me-2"
+                    *ngIf="(httpService.getLoading('printAction') | async); else printIcon"></span>
+                <ng-template #printIcon><i class="fe fe-printer me-2"></i></ng-template>
+                <span>Print All</span>
+            </button>
             <button class="btn btn-sm btn-light" (click)="add()" *hasPermission="PermissionCode.ADD_SUBDEVICE">
                 <i class="fe fe-plus me-3"></i>
                 <span>New Sub Device</span>
@@ -32,7 +51,7 @@
             <tbody *ngIf="!(httpService.getLoading('subDevicesList') | async) && totalRecords > 0">
                 <tr class="cursor-pointer"
                     *ngFor="let subDevice of subDevices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index"
-                    (click)="edit(subDevice)">
+                    (click)="view(subDevice)">
                     <td class="fw-bold text-truncate" style="max-width: 160px;" [title]="subDevice?.name || ''">{{
                         subDevice?.name || '—' }}</td>
                     <td class="text-truncate" style="max-width: 140px;" [title]="subDevice?.station_name || ''">{{
@@ -90,8 +109,13 @@
 <ul class="dropdown-menu show" *ngIf="activeMenuSubDevice" [style.position]="'fixed'" [style.top.px]="menuPosition.top"
     [style.left.px]="menuPosition.left" (click)="$event.stopPropagation()">
     <li>
+        <a class="dropdown-item" (click)="view(activeMenuSubDevice); closeMenu()">
+            <i class="fe fe-eye me-3"></i>View
+        </a>
+    </li>
+    <li *hasPermission="PermissionCode.EDIT_SUBDEVICE">
         <a class="dropdown-item" (click)="edit(activeMenuSubDevice); closeMenu()">
-            <i class="fe fe-edit me-3"></i>View / Edit
+            <i class="fe fe-edit me-3"></i>Edit
         </a>
     </li>
     <li *hasPermission="PermissionCode.VIEW_SUBDEVICES">

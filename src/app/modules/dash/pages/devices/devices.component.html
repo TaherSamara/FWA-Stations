@@ -18,62 +18,56 @@
         </div>
     </div>
 
-    <div class="card-body">
+    <div class="card-body devices-body">
         <div class="row g-3" *ngIf="!(httpService.getLoading('devicesList') | async) && totalRecords > 0">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
-                *ngFor="let device of devices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }; let i = index">
-                <div class="card device-card m-0">
-                    <div class="card-body text-center p-3">
-                        <div class="mb-3">
-                            <div class="device-icon mb-3">
-                                <i class="fe fe-radio fs-1 text-primary"></i>
-                            </div>
-                            <h4 class="card-title mb-0 fw-bold">{{ device?.name || '-' }}</h4>
+            <div class="col-12 col-sm-6 col-lg-4 col-xxl-3"
+                *ngFor="let device of devices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }">
+                <div class="device-card" [class.is-clickable]="canViewSubDevices" (click)="viewSubDevices(device)">
+                    <div class="device-main">
+                        <div class="device-icon">
+                            <i class="fe fe-radio"></i>
                         </div>
+                        <div class="device-info">
+                            <h4 class="device-name" [title]="device?.name">{{ device?.name || '-' }}</h4>
+                            <span class="device-type">{{ typeLabel }}</span>
+                        </div>
+                        <i class="fe fe-chevron-right device-arrow" *ngIf="canViewSubDevices"></i>
                     </div>
-                    <div class="card-footer bg-white border-top p-3" (click)="$event.stopPropagation()">
-                        <button class="btn btn-sm btn-primary w-100 mb-2" (click)="viewSubDevices(device)"
-                            *hasPermission="PermissionCode.VIEW_SUBDEVICES">
-                            <i class="fe fe-users me-1"></i>
-                            <small>View Device</small>
+
+                    <div class="device-actions" (click)="$event.stopPropagation()" *ngIf="hasAnyAction">
+                        <button class="action-btn" title="Edit" (click)="edit(device)"
+                            *hasPermission="PermissionCode.EDIT_DEVICE">
+                            <i class="fe fe-edit"></i><span>Edit</span>
                         </button>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-outline-primary flex-fill" (click)="edit(device)"
-                                *hasPermission="PermissionCode.EDIT_DEVICE">
-                                <i class="fe fe-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-success flex-fill" (click)="exportExcel(device)"
-                                *hasPermission="PermissionCode.EXPORT_DEVICES">
-                                <i class="fe fe-download"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger flex-fill" (click)="delete(device)"
-                                *hasPermission="PermissionCode.DELETE_DEVICE">
-                                <i class="fe fe-trash-2"></i>
-                            </button>
-                        </div>
+                        <button class="action-btn" title="Export" (click)="exportExcel(device)"
+                            *hasPermission="PermissionCode.EXPORT_DEVICES">
+                            <i class="fe fe-download"></i><span>Export</span>
+                        </button>
+                        <button class="action-btn is-danger" title="Delete" (click)="delete(device)"
+                            *hasPermission="PermissionCode.DELETE_DEVICE">
+                            <i class="fe fe-trash-2"></i><span>Delete</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="row g-3" *ngIf="(httpService.getLoading('devicesList') | async)">
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" *ngFor="let number of [].constructor(+size)">
-                <div class="card device-card is-loading m-0">
-                    <div class="card-body text-center p-3">
-                        <div class="mb-3">
-                            <div class="device-icon mb-3">
-                                <ngx-skeleton-loader appearance="circle" animation="progress-dark"
-                                    [theme]="{width:'60px',height:'60px','border-radius':'50%','margin':'0 auto'}"></ngx-skeleton-loader>
-                            </div>
+            <div class="col-12 col-sm-6 col-lg-4 col-xxl-3" *ngFor="let number of [].constructor(+size)">
+                <div class="device-card is-loading">
+                    <div class="device-main">
+                        <ngx-skeleton-loader appearance="circle" animation="progress-dark"
+                            [theme]="{width:'44px',height:'44px','border-radius':'12px','margin':'0'}"></ngx-skeleton-loader>
+                        <div class="flex-grow-1">
                             <ngx-skeleton-loader appearance="line" animation="progress-dark"
-                                [theme]="{width:'80%',height:'20px','border-radius':'3px','margin':'0 auto'}"></ngx-skeleton-loader>
+                                [theme]="{width:'70%',height:'16px','border-radius':'3px','margin':'0 0 6px 0'}"></ngx-skeleton-loader>
+                            <ngx-skeleton-loader appearance="line" animation="progress-dark"
+                                [theme]="{width:'40%',height:'12px','border-radius':'3px','margin':'0'}"></ngx-skeleton-loader>
                         </div>
                     </div>
-                    <div class="card-footer bg-white border-top p-3">
+                    <div class="device-actions">
                         <ngx-skeleton-loader appearance="line" animation="progress-dark"
-                            [theme]="{width:'100%',height:'32px','border-radius':'6px','margin':'0 0 8px 0'}"></ngx-skeleton-loader>
-                        <ngx-skeleton-loader appearance="line" animation="progress-dark"
-                            [theme]="{width:'100%',height:'32px','border-radius':'6px','margin':'0'}"></ngx-skeleton-loader>
+                            [theme]="{width:'100%',height:'28px','border-radius':'6px','margin':'0'}"></ngx-skeleton-loader>
                     </div>
                 </div>
             </div>

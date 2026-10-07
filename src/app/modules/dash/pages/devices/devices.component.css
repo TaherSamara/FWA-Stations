@@ -1,75 +1,120 @@
+.devices-body {
+  background: #f8f9fa;
+}
+
 .device-card {
-  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
   border: 1px solid #e3e6f0;
   border-radius: 12px;
   overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
-.device-card:not(.is-loading):hover {
-  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important;
+.device-card.is-clickable {
+  cursor: pointer;
+}
+
+.device-card.is-clickable:hover {
   border-color: #76bc21;
-  transform: translateY(-4px);
+  box-shadow: 0 0.5rem 1.25rem rgba(118, 188, 33, 0.18);
+  transform: translateY(-2px);
 }
 
-.device-card .card-body {
-  min-height: 140px;
+.device-main {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  transition: background 0.25s ease;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem;
 }
 
-.device-card:not(.is-loading):hover .card-body {
-  background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
-}
-
-.device-card .device-icon {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto;
+.device-icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f7ff;
-  border-radius: 50%;
-  transition: background 0.25s ease, transform 0.25s ease;
-}
-
-.device-card:not(.is-loading):hover .device-icon {
-  background: #76bc21;
-  transform: scale(1.1);
-}
-
-.device-card:not(.is-loading):hover .device-icon i {
-  color: white !important;
-}
-
-.device-card .card-title {
-  color: #2c3e50;
-  font-size: 1.1rem;
-  word-break: break-word;
-  transition: color 0.25s ease;
-}
-
-.device-card:not(.is-loading):hover .card-title {
+  border-radius: 12px;
+  background: #f1f8e9;
   color: #76bc21;
+  font-size: 1.3rem;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.device-card .card-footer {
-  border-top: 1px solid #e3e6f0;
-  background: white;
+.device-card.is-clickable:hover .device-icon {
+  background: #76bc21;
+  color: #fff;
 }
 
-.device-card .card-footer .btn {
+.device-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.device-name {
+  margin: 0 0 0.15rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c3e50;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.device-type {
+  font-size: 0.75rem;
+  color: #8a94a6;
+}
+
+.device-arrow {
+  flex-shrink: 0;
+  color: #c2c8d3;
+  font-size: 1.1rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.device-card.is-clickable:hover .device-arrow {
+  color: #76bc21;
+  transform: translateX(3px);
+}
+
+.device-actions {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: auto;
+  padding: 0.5rem 0.75rem;
+  background: #fafbfc;
+  border-top: 1px solid #eef0f4;
+  cursor: default;
+}
+
+.action-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #6e7b8c;
+  background: transparent;
+  border: 0;
   border-radius: 6px;
-  font-size: 0.85rem;
-  padding: 0.4rem 0.5rem;
-  transition: filter 0.2s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.device-card:not(.is-loading) .card-footer .btn:hover {
-  filter: brightness(0.94);
+.action-btn:hover {
+  background: #e8f5d6;
+  color: #4f7a15;
+}
+
+.action-btn.is-danger:hover {
+  background: #fdecec;
+  color: #d9534f;
 }
 
 .device-card.is-loading {

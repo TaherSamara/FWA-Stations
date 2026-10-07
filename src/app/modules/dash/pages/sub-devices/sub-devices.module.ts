@@ -11,11 +11,13 @@ import { DEVICE_TYPE_TABS } from '../../models';
 import { SharedModule } from '../../shared/shared.module';
 import { AddEditSubDevicesComponent } from './add-edit/add-edit.component';
 import { SubDevicesComponent } from './sub-devices.component';
+import { ViewSubDeviceComponent } from './view/view.component';
 
 @NgModule({
   declarations: [
     SubDevicesComponent,
     AddEditSubDevicesComponent,
+    ViewSubDeviceComponent,
   ],
   imports: [
     CommonModule,

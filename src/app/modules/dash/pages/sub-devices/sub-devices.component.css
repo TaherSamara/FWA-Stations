@@ -1,3 +1,59 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.min-w-0 {
+  min-width: 0;
+}
+
+.sub-devices-header {
+  gap: 1rem;
+}
+
+.back-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.device-title {
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: 280px;
+  padding: 0.25rem 0.9rem 0.25rem 0.35rem;
+  border-radius: 999px;
+  background: #f1f8e9;
+  border: 1px solid #dcedc8;
+}
+
+.device-title h4 {
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.device-title-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #76bc21;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.search-box {
+  flex: 1 1 220px;
+  max-width: 420px;
+}
+
+@media (max-width: 767.98px) {
+  .sub-devices-header {
+    flex-wrap: wrap;
+  }
+
+  .device-title {
+    max-width: 100%;
+  }
+}

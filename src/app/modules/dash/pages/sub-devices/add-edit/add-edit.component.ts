@@ -22,7 +22,7 @@ export class AddEditSubDevicesComponent {
     public httpService: HttpService,
     private api: ApiService,
     private toastrsService: ToastrsService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initForm();
@@ -34,6 +34,9 @@ export class AddEditSubDevicesComponent {
 
   submit() {
     this.submitted = true;
+    console.log(this.form.valid);
+    console.log(this.form.value);
+
     if (this.form.valid) {
       const requestData: any = {
         name: this.f.Name.value,
@@ -91,22 +94,15 @@ export class AddEditSubDevicesComponent {
       ManagementVlan: new FormControl(this.subDevice?.management_vlan || ''),
       WanIp: new FormControl(this.subDevice?.wan_ip || ''),
       MikrotikId: new FormControl(this.subDevice?.mikrotik_id || ''),
-      MikrotikMacAddress: new FormControl(
-        this.subDevice?.mikrotik_mac_address || '',
-      ),
+      MikrotikMacAddress: new FormControl(this.subDevice?.mikrotik_mac_address || ''),
       SasPort: new FormControl(this.subDevice?.sas_port || ''),
       OdfName: new FormControl(this.subDevice?.odf_name || ''),
       OdfPort: new FormControl(this.subDevice?.odf_port || ''),
       CustomerAddress: new FormControl(this.subDevice?.customer_address || ''),
       ContactPerson: new FormControl(this.subDevice?.contact_person || ''),
-      ContactPersonPhoneNo: new FormControl(
-        this.subDevice?.contact_person_phone_no || '',
-      ),
+      ContactPersonPhoneNo: new FormControl(this.subDevice?.contact_person_phone_no || ''),
       OtherDetails: new FormControl(this.subDevice?.other_details || ''),
-      DeviceId: new FormControl(
-        this.subDevice?.device_id || this.deviceId || '',
-        Validators.required,
-      ),
+      DeviceId: new FormControl(this.subDevice?.device_id || this.deviceId || '', Validators.required)
     });
   }
 }

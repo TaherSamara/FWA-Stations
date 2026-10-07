@@ -1,3 +1,13 @@
+<!-- Permission details shown on hover (fixed to the viewport, never clipped by the table) -->
+<div class="perm-popover" *ngIf="hoveredCategory" [style.top.px]="popPosition.top" [style.left.px]="popPosition.left">
+    <div class="perm-pop-title">{{ hoveredCategory.name }} <span>{{ hoveredCategory.count }}</span></div>
+    <ul class="perm-pop-list">
+        <li *ngFor="let p of hoveredCategory.permissions">
+            <i class="fe fe-check"></i>{{ p.name }}
+        </li>
+    </ul>
+</div>
+
 <div class="card">
     <div class="card-header">
         <div class="d-flex align-items-center input-group-merge input-group-flush input-group position-relative">
@@ -30,11 +40,13 @@
                     <td>{{ user?.first_name }} {{ user?.last_name }}</td>
                     <td>{{ user?.email || '-' }}</td>
                     <td>
-                        <div class="d-flex flex-wrap gap-2"
+                        <div class="perm-list"
                             *ngIf="user?.permissions && user.permissions.length > 0; else noPermissions">
-                            <span *ngFor="let category of getPermissionsByCategory(user.permissions)"
-                                class="badge badge-sm text-white bg-primary" [title]="getCategoryTooltip(category)">
-                                {{ category.name }} ({{ category.count }})
+                            <span *ngFor="let category of user.permission_groups"
+                                class="perm-chip" (mouseenter)="showPerms($event, category)"
+                                (mouseleave)="hidePerms()">
+                                <span class="perm-name">{{ category.name }}</span>
+                                <span class="perm-count">{{ category.count }}</span>
                             </span>
                         </div>
                         <ng-template #noPermissions>

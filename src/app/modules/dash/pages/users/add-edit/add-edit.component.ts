@@ -44,7 +44,11 @@ export class AddEditUsersComponent {
   loadPermissions() {
     this.permissionsService.getPermissionsByCategory().subscribe((grouped) => {
       this.permissionsByCategory = grouped;
-      this.categoryKeys = Object.keys(grouped);
+      this.categoryKeys = Object.keys(grouped).sort(
+        (a, b) =>
+          this.permissionsService.categoryOrder(a) -
+          this.permissionsService.categoryOrder(b),
+      );
 
       // Load user's selected permissions after categories are loaded
       if (
@@ -116,6 +120,12 @@ export class AddEditUsersComponent {
     return categoryPermissions.every((permission) =>
       this.selectedPermissions.includes(permission.id),
     );
+  }
+
+  selectedCount(category: string): number {
+    return (this.permissionsByCategory[category] || []).filter((p) =>
+      this.selectedPermissions.includes(p.id),
+    ).length;
   }
 
   isPermissionSelected(permissionId: number): boolean {

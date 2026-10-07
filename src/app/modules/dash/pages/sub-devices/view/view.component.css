@@ -1,0 +1,130 @@
+.min-w-0 {
+  min-width: 0;
+}
+
+.view-header {
+  background: linear-gradient(135deg, #f1f8e9 0%, #ffffff 100%);
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.view-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #76bc21;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.view-body {
+  padding: 15px;
+  max-height: 75vh;
+  overflow-y: auto;
+  background: #f8f9fa;
+  scrollbar-width: thin;
+  scrollbar-color: #c5cad3 transparent;
+}
+
+.view-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.view-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.view-body::-webkit-scrollbar-thumb {
+  background: #c5cad3;
+  border-radius: 999px;
+}
+
+.view-body::-webkit-scrollbar-thumb:hover {
+  background: #76bc21;
+}
+
+.view-section {
+  background: #fff;
+  border: 1px solid #e3e6f0;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+.view-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #76bc21;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px solid #eef0f4;
+}
+
+.view-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.4rem 0;
+}
+
+.view-list.is-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.view-list.is-inline .view-item {
+  flex: 1 1 180px;
+  flex-direction: column;
+  gap: 0.15rem;
+  border-top: 0 !important;
+}
+
+.view-list.is-inline .view-item dt,
+.view-list.is-inline .view-item dd {
+  flex: none;
+  text-align: left;
+}
+
+.view-item + .view-item {
+  border-top: 1px dashed #eef0f4;
+}
+
+.view-item dt {
+  flex: 0 0 38%;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #8a94a6;
+}
+
+.view-item dd {
+  flex: 1;
+  margin: 0;
+  text-align: right;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c3e50;
+  word-break: break-word;
+}
+
+.view-item dd.is-mono {
+  font-family: SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.view-item dd.is-empty {
+  color: #c2c8d3;
+  font-weight: 400;
+}
+
+.view-item dd.is-long {
+  text-align: left;
+  font-weight: 400;
+  white-space: pre-wrap;
+}

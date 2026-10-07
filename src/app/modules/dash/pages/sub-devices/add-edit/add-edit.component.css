@@ -1,1 +1,69 @@
-/* Add Edit Sub Devices Component Styles */
+/* Matches the look of the sub device view modal */
+.edit-header {
+  background: linear-gradient(135deg, #f1f8e9 0%, #ffffff 100%);
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.edit-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #76bc21;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.edit-body {
+  padding: 15px;
+  max-height: 75vh;
+  overflow-y: auto;
+  background: #f8f9fa;
+  scrollbar-width: thin;
+  scrollbar-color: #c5cad3 transparent;
+}
+
+.edit-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.edit-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.edit-body::-webkit-scrollbar-thumb {
+  background: #c5cad3;
+  border-radius: 999px;
+}
+
+.edit-body::-webkit-scrollbar-thumb:hover {
+  background: #76bc21;
+}
+
+.edit-section {
+  background: #fff;
+  border: 1px solid #e3e6f0;
+  border-radius: 10px;
+  padding: 0.9rem 1rem 1rem;
+}
+
+.edit-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #76bc21;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px solid #eef0f4;
+}
+
+.edit-section .form-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #8a94a6;
+  margin-bottom: 0.25rem;
+}

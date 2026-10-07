@@ -77,6 +77,18 @@ export class PermissionsService {
   }
 
   /**
+   * Fixed display order of categories: Users, Devices, Sub devices, Warehouse
+   * (anything else goes last)
+   */
+  categoryOrder(category: string): number {
+    const order = ['users', 'devices', 'subdevices', 'warehouse'];
+    const index = order.indexOf(
+      (category || '').toLowerCase().replace(/[^a-z]/g, ''),
+    );
+    return index === -1 ? order.length : index;
+  }
+
+  /**
    * Get category display name
    */
   getCategoryName(category: string): string {

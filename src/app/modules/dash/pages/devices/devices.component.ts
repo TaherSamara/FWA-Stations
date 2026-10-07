@@ -127,10 +127,27 @@ export class DevicesComponent {
     modalRef.result.then(() => this.list(1, false));
   }
 
+  get typeLabel(): string {
+    return getDeviceTypeTab(this.deviceType)?.label || '';
+  }
+
+  get canViewSubDevices(): boolean {
+    return this.authService.hasPermission(PermissionCode.VIEW_SUBDEVICES);
+  }
+
+  get hasAnyAction(): boolean {
+    return this.authService.hasAnyPermission([
+      PermissionCode.EDIT_DEVICE,
+      PermissionCode.EXPORT_DEVICES,
+      PermissionCode.DELETE_DEVICE,
+    ]);
+  }
+
   viewSubDevices(device: any) {
+    if (!this.canViewSubDevices) return;
     const slug = getDeviceTypeTab(device.type)?.slug || '';
     this.router.navigate(['/sub-devices', slug], {
-      queryParams: { deviceId: device.id },
+      queryParams: { deviceId: device.id, deviceName: device.name },
     });
   }
 }
