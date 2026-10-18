@@ -2,6 +2,8 @@ import { Device } from './device.model';
 
 export interface SubDevice {
   id: number;
+  slot?: string;
+  port?: string;
   name: string;
   station_name?: string;
   line_code: string;

@@ -21,8 +21,7 @@ import { AddEditDevicesComponent } from './add-edit/add-edit.component';
 export class DevicesComponent {
   devices: any = [];
   searchText: string = '';
-  page: number = 1;
-  size: number = 18;
+  readonly size: number = 10000;
   totalCount: number;
   totalRecords: number;
   deviceType: DeviceType;
@@ -39,21 +38,20 @@ export class DevicesComponent {
     private router: Router,
     private route: ActivatedRoute,
     public authService: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
       this.deviceType = data['deviceType'];
-      this.list(1);
+      this.list();
     });
   }
 
-  list(p: number, withLoader: boolean = true): void {
-    this.page = p;
+  list(withLoader: boolean = true): void {
     let params = new HttpParams()
       .set('q', this.searchText)
       .set('size', this.size)
-      .set('page', this.page)
+      .set('page', 1)
       .set('type', this.deviceType);
 
     this.httpService
@@ -81,7 +79,7 @@ export class DevicesComponent {
       centered: true,
     });
     modalRef.componentInstance.deviceType = this.deviceType;
-    modalRef.result.then(() => this.list(1, false));
+    modalRef.result.then(() => this.list(false));
   }
 
   importExcel() {
@@ -92,7 +90,7 @@ export class DevicesComponent {
     modalRef.componentInstance.type = 'subDevices';
     modalRef.componentInstance.deviceType = this.deviceType;
     modalRef.result.then(
-      () => this.list(1, false),
+      () => this.list(false),
       () => { },
     );
   }
@@ -103,7 +101,7 @@ export class DevicesComponent {
       centered: true,
     });
     modalRef.componentInstance.device = device;
-    modalRef.result.then(() => this.list(1, false));
+    modalRef.result.then(() => this.list(false));
   }
 
   exportExcel(device: any) {
@@ -124,7 +122,7 @@ export class DevicesComponent {
     modalRef.componentInstance.id = device.id;
     modalRef.componentInstance.type = 'device';
     modalRef.componentInstance.message = `Do you want to delete ${device.name}?`;
-    modalRef.result.then(() => this.list(1, false));
+    modalRef.result.then(() => this.list(false));
   }
 
   get typeLabel(): string {

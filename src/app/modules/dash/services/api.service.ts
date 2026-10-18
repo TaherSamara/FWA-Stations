@@ -37,6 +37,18 @@ export class ApiService {
     ping: (ip: string) => API_BASE_URL + 'SubDevices/ping/' + ip,
   };
 
+  // Path Links Management
+  pathLinks = {
+    list: API_BASE_URL + 'PathLinks/list',
+    get: (id: number) => API_BASE_URL + 'PathLinks/get/' + id,
+    add: API_BASE_URL + 'PathLinks/add',
+    edit: (id: number) => API_BASE_URL + 'PathLinks/edit/' + id,
+    delete: (id: number) => API_BASE_URL + 'PathLinks/delete/' + id,
+    devices: API_BASE_URL + 'PathLinks/lookup/devices',
+    slots: API_BASE_URL + 'PathLinks/lookup/slots',
+    ports: API_BASE_URL + 'PathLinks/lookup/ports',
+  };
+
   // Warehouse Management
   warehouse = {
     list: API_BASE_URL + 'Warehouse/list',

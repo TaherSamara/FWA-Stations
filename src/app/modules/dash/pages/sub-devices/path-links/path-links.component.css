@@ -1,0 +1,135 @@
+.min-w-0 {
+  min-width: 0;
+}
+
+.path-header {
+  background: linear-gradient(135deg, #f1f8e9 0%, #ffffff 100%);
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.path-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #76bc21;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.path-body {
+  padding: 15px;
+  background: #f8f9fa;
+}
+
+.path-empty {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #8a94a6;
+}
+
+.path-empty i {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #c5cad3;
+}
+
+.path-card {
+  background: #fff;
+  border: 1px solid #e3e6f0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem 1rem;
+}
+
+.path-card + .path-card {
+  margin-top: 0.9rem;
+}
+
+.path-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.path-card-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #76bc21;
+}
+
+.path-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.path-table {
+  --accent: #76bc21;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #e3e6f0;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.85rem;
+}
+
+.path-table.is-from {
+  --accent: #e8a23a;
+}
+
+.path-table.is-odf {
+  --accent: #26397a;
+}
+
+.path-table.is-to {
+  --accent: #2e9e4f;
+}
+
+.path-table th {
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.6rem;
+  white-space: nowrap;
+}
+
+.path-table td {
+  padding: 0.5rem 0.6rem;
+  border-top: 1px solid #eef0f4;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.path-table tbody tr:nth-child(even) td {
+  background: #fafbfc;
+}
+
+.path-table tr.is-current td {
+  background: #f1f8e9 !important;
+}
+
+.path-table tr.is-current td:first-child {
+  box-shadow: inset 3px 0 0 #76bc21;
+}
+
+.mono {
+  font-family: Consolas, monospace;
+}
+
+@media (max-width: 991.98px) {
+  .path-layout {
+    grid-template-columns: 1fr;
+  }
+}

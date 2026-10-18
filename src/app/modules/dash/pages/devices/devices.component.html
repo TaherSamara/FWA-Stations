@@ -3,7 +3,7 @@
         <div class="d-flex align-items-center input-group-merge input-group-flush input-group position-relative">
             <i class="fe fe-search text-muted position-absolute me-3"></i>
             <input [disabled]="totalCount == 0" [(ngModel)]="searchText" class="form-control m-0 ps-4"
-                placeholder="Type to search..." (ngModelChange)="list(1)">
+                placeholder="Type to search..." (ngModelChange)="list()">
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-sm btn-success" (click)="importExcel()"
@@ -20,8 +20,8 @@
 
     <div class="card-body devices-body">
         <div class="row g-3" *ngIf="!(httpService.getLoading('devicesList') | async) && totalRecords > 0">
-            <div class="col-12 col-sm-6 col-lg-4 col-xxl-3"
-                *ngFor="let device of devices | paginate: { itemsPerPage: size, currentPage: page, totalItems: totalRecords }">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2"
+                *ngFor="let device of devices">
                 <div class="device-card" [class.is-clickable]="canViewSubDevices" (click)="viewSubDevices(device)">
                     <div class="device-main">
                         <div class="device-icon">
@@ -53,7 +53,7 @@
         </div>
 
         <div class="row g-3" *ngIf="(httpService.getLoading('devicesList') | async)">
-            <div class="col-12 col-sm-6 col-lg-4 col-xxl-3" *ngFor="let number of [].constructor(+size)">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2" *ngFor="let number of [].constructor(12)">
                 <div class="device-card is-loading">
                     <div class="device-main">
                         <ngx-skeleton-loader appearance="circle" animation="progress-dark"
@@ -76,10 +76,6 @@
 
     <!-- if no results -->
     <app-no-results [isLoading$]="httpService.getLoading('devicesList')" [totalRecords]="totalRecords"></app-no-results>
-
-    <!-- pagination -->
-    <app-pagination [isLoading$]="httpService.getLoading('devicesList')" [totalRecords]="totalRecords" [size]="size"
-        (pageChange)="list($event)"></app-pagination>
 </div>
 <br>
 <br>

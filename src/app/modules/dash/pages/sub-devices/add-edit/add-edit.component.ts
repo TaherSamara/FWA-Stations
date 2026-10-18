@@ -34,11 +34,11 @@ export class AddEditSubDevicesComponent {
 
   submit() {
     this.submitted = true;
-    console.log(this.form.valid);
-    console.log(this.form.value);
 
     if (this.form.valid) {
       const requestData: any = {
+        slot: this.f.Slot.value,
+        port: this.f.Port.value,
         name: this.f.Name.value,
         station_name: this.f.StationName.value,
         line_code: this.f.LineCode.value,
@@ -81,6 +81,8 @@ export class AddEditSubDevicesComponent {
 
   initForm() {
     this.form = new FormGroup({
+      Slot: new FormControl(this.subDevice?.slot || ''),
+      Port: new FormControl(this.subDevice?.port || ''),
       Name: new FormControl(this.subDevice?.name || '', Validators.required),
       StationName: new FormControl(this.subDevice?.station_name || ''),
       LineCode: new FormControl(this.subDevice?.line_code || ''),

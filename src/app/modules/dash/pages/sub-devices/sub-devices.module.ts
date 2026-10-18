@@ -10,6 +10,9 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { DEVICE_TYPE_TABS } from '../../models';
 import { SharedModule } from '../../shared/shared.module';
 import { AddEditSubDevicesComponent } from './add-edit/add-edit.component';
+import { AddEditPathLinkComponent } from './path-links/add-edit-path-link/add-edit-path-link.component';
+import { EndpointPickerComponent } from './path-links/endpoint-picker/endpoint-picker.component';
+import { PathLinksComponent } from './path-links/path-links.component';
 import { SubDevicesComponent } from './sub-devices.component';
 import { ViewSubDeviceComponent } from './view/view.component';
 
@@ -18,6 +21,9 @@ import { ViewSubDeviceComponent } from './view/view.component';
     SubDevicesComponent,
     AddEditSubDevicesComponent,
     ViewSubDeviceComponent,
+    PathLinksComponent,
+    AddEditPathLinkComponent,
+    EndpointPickerComponent,
   ],
   imports: [
     CommonModule,

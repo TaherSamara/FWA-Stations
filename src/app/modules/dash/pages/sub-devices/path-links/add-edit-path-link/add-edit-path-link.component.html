@@ -1,0 +1,88 @@
+<div class="modal-header path-header">
+    <div class="d-flex align-items-center gap-3 min-w-0">
+        <div class="path-icon">
+            <i class="fe" [class.fe-edit]="pathLink" [class.fe-git-commit]="!pathLink"></i>
+        </div>
+        <div class="min-w-0">
+            <h4 class="modal-title mb-1">{{ pathLink ? 'Edit Path' : 'New Path' }}</h4>
+            <div class="text-muted small text-truncate" *ngIf="fromSummary">
+                <i class="fe fe-log-out me-1"></i>{{ fromSummary }}
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body path-body">
+    <div class="row g-3">
+        <div class="col-12 col-lg-3">
+            <div class="path-panel is-from h-100">
+                <div class="path-panel-title"><i class="fe fe-log-out me-2"></i>Connect From</div>
+                <div class="path-panel-body">
+                    <app-endpoint-picker [selection]="from" [invalid]="submitted"></app-endpoint-picker>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="path-panel is-odf h-100">
+                <div class="path-panel-title d-flex align-items-center justify-content-between">
+                    <span><i class="fe fe-git-merge me-2"></i>ODF Path</span>
+                    <button type="button" class="btn btn-sm btn-add-odf" (click)="addOdf()">
+                        <i class="fe fe-plus me-1"></i>Add ODF
+                    </button>
+                </div>
+                <div class="path-panel-body">
+                    <div class="odf-head" *ngIf="odfs.length">
+                        <span>#</span>
+                        <span class="odf-head-cols">
+                            <span>ODF Name</span>
+                            <span class="odf-head-pair"><span>Slot</span><span>Port</span></span>
+                        </span>
+                        <span></span>
+                    </div>
+
+                    <div class="odf-row" *ngFor="let row of odfs; let i = index; let last = last; trackBy: trackByKey">
+                        <span class="odf-order">{{ i + 1 }}</span>
+                        <app-endpoint-picker class="odf-picker" [selection]="row.selection" [fixedType]="OdfType"
+                            [compact]="true" [invalid]="submitted" deviceLabel="ODF Name"></app-endpoint-picker>
+                        <span class="odf-actions">
+                            <button type="button" class="btn btn-sm btn-icon" title="Move up" [disabled]="i === 0"
+                                (click)="moveOdf(i, -1)"><i class="fe fe-chevron-up"></i></button>
+                            <button type="button" class="btn btn-sm btn-icon" title="Move down" [disabled]="last"
+                                (click)="moveOdf(i, 1)"><i class="fe fe-chevron-down"></i></button>
+                            <button type="button" class="btn btn-sm btn-icon text-danger" title="Remove"
+                                (click)="removeOdf(i)"><i class="fe fe-x"></i></button>
+                        </span>
+                    </div>
+
+                    <div class="odf-empty" *ngIf="!odfs.length">
+                        No ODF in this path. Use <b>Add ODF</b> to add the first hop.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-3">
+            <div class="path-panel is-to h-100">
+                <div class="path-panel-title"><i class="fe fe-log-in me-2"></i>Connect To</div>
+                <div class="path-panel-body">
+                    <app-endpoint-picker [selection]="to" [invalid]="submitted"></app-endpoint-picker>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-3"></i>Cancel
+    </button>
+    <button type="button" class="btn btn-sm btn-primary" (click)="submit()"
+        [disabled]="(httpService.getLoading('pathLinkAction') | async)">
+        <i class="fe fe-check me-2" *ngIf="!(httpService.getLoading('pathLinkAction') | async)"></i>
+        <span class="spinner-border spinner-border-sm me-2"
+            *ngIf="(httpService.getLoading('pathLinkAction') | async)"></span>
+        <span>{{ pathLink ? 'Update' : 'Save' }}</span>
+    </button>
+</div>

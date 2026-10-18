@@ -14,6 +14,7 @@ interface ViewSection {
   title: string;
   icon: string;
   inline?: boolean;
+  grid?: boolean;
   fields: ViewField[];
 }
 
@@ -30,7 +31,10 @@ export class ViewSubDeviceComponent {
     {
       title: 'Basic Information',
       icon: 'fe-info',
+      grid: true,
       fields: [
+        { label: 'Slot', key: 'slot', type: 'mono' },
+        { label: 'Port', key: 'port', type: 'mono' },
         { label: 'Station Name', key: 'station_name' },
         { label: 'Line Code', key: 'line_code', type: 'mono' },
         { label: 'Order Number', key: 'order_number', type: 'mono' },

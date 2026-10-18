@@ -1,0 +1,38 @@
+.endpoint {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ep-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #8a94a6;
+  margin-bottom: 0.2rem;
+}
+
+.ep-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.endpoint.is-compact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 0.5rem;
+  align-items: end;
+}
+
+.endpoint.is-compact .ep-label {
+  display: none;
+}
+
+@media (max-width: 575.98px) {
+  .endpoint.is-compact {
+    grid-template-columns: 1fr;
+  }
+}

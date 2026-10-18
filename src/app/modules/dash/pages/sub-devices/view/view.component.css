@@ -91,6 +91,26 @@
   text-align: left;
 }
 
+.view-list.is-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1.25rem;
+}
+
+.view-list.is-grid .view-item {
+  border-top: 0 !important;
+  border-bottom: 1px dashed #eef0f4;
+}
+
+.view-list.is-grid .view-item:nth-last-child(-n + 2):nth-child(odd),
+.view-list.is-grid .view-item:last-child {
+  border-bottom: 0;
+}
+
+.view-list.is-grid .view-item dt {
+  flex: 0 0 auto;
+}
+
 .view-item + .view-item {
   border-top: 1px dashed #eef0f4;
 }

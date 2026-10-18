@@ -1,0 +1,166 @@
+.min-w-0 {
+  min-width: 0;
+}
+
+.path-header {
+  background: linear-gradient(135deg, #f1f8e9 0%, #ffffff 100%);
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.path-icon {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #76bc21;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.path-body {
+  padding: 15px;
+  max-height: 75vh;
+  overflow-y: auto;
+  background: #f8f9fa;
+}
+
+.path-panel {
+  --accent: #76bc21;
+  background: #fff;
+  border: 1px solid #e3e6f0;
+  border-top: 3px solid var(--accent);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.path-panel.is-from {
+  --accent: #e8a23a;
+}
+
+.path-panel.is-odf {
+  --accent: #26397a;
+}
+
+.path-panel.is-to {
+  --accent: #2e9e4f;
+}
+
+.path-panel-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 0.75rem 1rem 0.6rem;
+  border-bottom: 1px solid #eef0f4;
+}
+
+.path-panel-body {
+  padding: 0.9rem 1rem 1rem;
+}
+
+.btn-add-odf {
+  background: #26397a;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+}
+
+.btn-add-odf:hover {
+  background: #1d2c60;
+  color: #fff;
+}
+
+.odf-head,
+.odf-row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 84px;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.odf-head {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #8a94a6;
+  padding-bottom: 0.35rem;
+}
+
+.odf-head-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 0.5rem;
+}
+
+.odf-head-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.odf-row {
+  padding: 0.45rem 0;
+  border-top: 1px dashed #eef0f4;
+}
+
+.odf-order {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #eef1f8;
+  color: #26397a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.odf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.btn-icon {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  color: #6e7b8c;
+}
+
+.btn-icon:hover:not(:disabled) {
+  background: #f1f3f7;
+}
+
+.odf-empty {
+  padding: 1.5rem 0.5rem;
+  text-align: center;
+  color: #8a94a6;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 575.98px) {
+  .odf-head {
+    display: none;
+  }
+
+  .odf-row {
+    grid-template-columns: 24px minmax(0, 1fr);
+  }
+
+  .odf-actions {
+    grid-column: 2;
+  }
+}

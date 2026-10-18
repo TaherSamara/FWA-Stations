@@ -12,6 +12,8 @@ import { ToastrsService } from '../../services/toater.service';
 import { DeleteComponent } from '../../shared/delete/delete.component';
 import { PingComponent } from '../../shared/ping/ping.component';
 import { AddEditSubDevicesComponent } from './add-edit/add-edit.component';
+import { AddEditPathLinkComponent } from './path-links/add-edit-path-link/add-edit-path-link.component';
+import { PathLinksComponent } from './path-links/path-links.component';
 import { ViewSubDeviceComponent } from './view/view.component';
 
 @Component({
@@ -26,8 +28,7 @@ export class SubDevicesComponent {
   selectedDeviceId: number = 0;
   selectedDeviceType: DeviceType;
   selectedDevice: any = null;
-  page: number = 1;
-  size: number = 10;
+  readonly size: number = 10000;
   totalCount: number;
   totalRecords: number;
 
@@ -48,7 +49,6 @@ export class SubDevicesComponent {
     private router: Router,
     public authService: AuthService,
   ) {
-    this.size = this.publicService.getNumOfRows(290, 70.57);
   }
 
   ngOnInit(): void {
@@ -65,7 +65,7 @@ export class SubDevicesComponent {
           name: params['deviceName'] || '',
         };
       }
-      this.list(1);
+      this.list();
     });
   }
 
@@ -89,12 +89,11 @@ export class SubDevicesComponent {
       });
   }
 
-  list(p: number, withLoader: boolean = true): void {
-    this.page = p;
+  list(withLoader: boolean = true): void {
     let params = new HttpParams()
       .set('q', this.searchText)
       .set('size', this.size)
-      .set('page', this.page);
+      .set('page', 1);
 
     if (this.selectedDeviceId > 0) {
       params = params.set('device_id', this.selectedDeviceId);
@@ -132,7 +131,7 @@ export class SubDevicesComponent {
     });
     modalRef.componentInstance.devices = this.devices;
     modalRef.componentInstance.deviceId = this.selectedDeviceId;
-    modalRef.result.then(() => this.list(1, false));
+    modalRef.result.then(() => this.list(false));
   }
 
   view(subDevice: any) {
@@ -145,6 +144,7 @@ export class SubDevicesComponent {
     modalRef.result.then(
       (action) => {
         if (action === 'edit') this.edit(subDevice);
+        if (action === 'paths') this.viewPaths(subDevice);
       },
       () => {},
     );
@@ -178,6 +178,8 @@ export class SubDevicesComponent {
 
   private printSubDevices(rows: any[]): void {
     const columns: { label: string; get: (s: any) => any; mono?: boolean }[] = [
+      { label: 'Slot', get: (s) => s.slot, mono: true },
+      { label: 'Port', get: (s) => s.port, mono: true },
       { label: 'Name', get: (s) => s.name },
       { label: 'Station', get: (s) => s.station_name },
       { label: 'Line Code', get: (s) => s.line_code, mono: true },
@@ -268,7 +270,7 @@ export class SubDevicesComponent {
     modalRef.componentInstance.devices = this.devices;
     modalRef.componentInstance.deviceId = this.selectedDeviceId;
     modalRef.result.then(
-      () => this.list(1, false),
+      () => this.list(false),
       () => {},
     );
   }
@@ -278,7 +280,30 @@ export class SubDevicesComponent {
     modalRef.componentInstance.id = subDevice.id;
     modalRef.componentInstance.type = 'subDevice';
     modalRef.componentInstance.message = `Do you want to delete ${subDevice.name}?`;
-    modalRef.result.then(() => this.list(1, false));
+    modalRef.result.then(() => this.list(false));
+  }
+
+  addPath(subDevice: any) {
+    const modalRef = this.modalService.open(AddEditPathLinkComponent, {
+      size: 'xl',
+      centered: true,
+    });
+    modalRef.componentInstance.fromSubDevice = subDevice;
+    modalRef.componentInstance.fromDeviceType = this.selectedDeviceType;
+    modalRef.result.then(
+      () => this.viewPaths(subDevice),
+      () => {},
+    );
+  }
+
+  viewPaths(subDevice: any) {
+    const modalRef = this.modalService.open(PathLinksComponent, {
+      size: 'xl',
+      centered: true,
+      scrollable: true,
+    });
+    modalRef.componentInstance.subDevice = subDevice;
+    modalRef.componentInstance.deviceType = this.selectedDeviceType;
   }
 
   pingIP(subDevice: any) {

@@ -7,6 +7,8 @@ import { ToastrsService } from '../../services/toater.service';
 
 const SUB_DEVICE_TEMPLATE_COLUMNS = [
   'device_name',
+  'slot',
+  'port',
   'name',
   'station_name',
   'line_code',
@@ -28,7 +30,6 @@ const SUB_DEVICE_TEMPLATE_COLUMNS = [
   'contact_person',
   'contact_person_phone_no',
   'other_details',
-  'notes',
 ];
 
 @Component({

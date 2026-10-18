@@ -43,6 +43,9 @@ export class DeleteComponent {
       case 'subDevice':
         url = this.api.subDevices.delete(this.id);
         break;
+      case 'pathLink':
+        url = this.api.pathLinks.delete(this.id);
+        break;
       case 'warehouseDevice':
         url = this.api.warehouse.delete(this.id);
         break;

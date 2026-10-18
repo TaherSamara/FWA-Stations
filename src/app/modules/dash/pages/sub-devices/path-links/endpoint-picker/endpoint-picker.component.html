@@ -1,0 +1,42 @@
+<div class="endpoint" [class.is-compact]="compact">
+    <div class="ep-field" *ngIf="!fixedType">
+        <label class="ep-label">Device Type</label>
+        <select class="form-select form-select-sm" [(ngModel)]="selection.device_type"
+            (ngModelChange)="onTypeChange()" [disabled]="disabled">
+            <option [ngValue]="null">- Select -</option>
+            <option *ngFor="let t of deviceTypes" [ngValue]="t.type">{{ t.label }}</option>
+        </select>
+    </div>
+
+    <div class="ep-field ep-device">
+        <label class="ep-label">{{ deviceLabel }}</label>
+        <select class="form-select form-select-sm" [(ngModel)]="selection.device_id"
+            (ngModelChange)="onDeviceChange()"
+            [disabled]="disabled || !selection.device_type || loading.devices"
+            [class.is-invalid]="invalid && !selection.device_id">
+            <option [ngValue]="null">{{ loading.devices ? 'Loading...' : '- Select -' }}</option>
+            <option *ngFor="let d of devices" [ngValue]="d.id">{{ d.name }}</option>
+        </select>
+    </div>
+
+    <div class="ep-pair">
+        <div class="ep-field">
+            <label class="ep-label">Slot</label>
+            <select class="form-select form-select-sm" [(ngModel)]="selection.slot" (ngModelChange)="onSlotChange()"
+                [disabled]="disabled || !selection.device_id || loading.slots"
+                [class.is-invalid]="invalid && selection.device_id && selection.slot === null">
+                <option [ngValue]="hasEmptySlot ? '' : null">{{ loading.slots ? '...' : '-' }}</option>
+                <option *ngFor="let s of slots" [ngValue]="s">{{ s }}</option>
+            </select>
+        </div>
+        <div class="ep-field">
+            <label class="ep-label">Port</label>
+            <select class="form-select form-select-sm" [(ngModel)]="selection.sub_device_id"
+                [disabled]="disabled || selection.slot === null || loading.ports"
+                [class.is-invalid]="invalid && selection.slot !== null && !selection.sub_device_id">
+                <option [ngValue]="emptyPortId">{{ loading.ports ? '...' : '-' }}</option>
+                <option *ngFor="let p of ports" [ngValue]="p.id" [title]="p.name">{{ p.port }}</option>
+            </select>
+        </div>
+    </div>
+</div>

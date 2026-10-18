@@ -1,0 +1,108 @@
+<div class="modal-header path-header">
+    <div class="d-flex align-items-center gap-3 min-w-0">
+        <div class="path-icon"><i class="fe fe-share-2"></i></div>
+        <div class="min-w-0">
+            <h4 class="modal-title mb-1">Path Links</h4>
+            <div class="d-flex align-items-center gap-2 flex-wrap small">
+                <span class="fw-bold text-truncate">{{ subDevice?.name }}</span>
+                <span class="badge bg-success-soft" *ngIf="subDevice?.slot || subDevice?.port">
+                    Slot {{ subDevice?.slot || '—' }} · Port {{ subDevice?.port || '—' }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button type="button" class="btn btn-sm btn-primary" (click)="add()"
+            *hasPermission="PermissionCode.ADD_SUBDEVICE">
+            <i class="fe fe-plus me-2"></i>Add Path
+        </button>
+        <button type="button" class="btn-close ms-2" (click)="activeModal.dismiss()"></button>
+    </div>
+</div>
+
+<div class="modal-body path-body">
+    <div class="text-center py-5" *ngIf="(httpService.getLoading('pathLinksList') | async) && !loaded">
+        <span class="spinner-border spinner-border-sm text-muted"></span>
+    </div>
+
+    <div class="path-empty" *ngIf="loaded && paths.length === 0">
+        <i class="fe fe-share-2"></i>
+        <p class="mb-0">No paths linked to this port yet.</p>
+    </div>
+
+    <div class="path-card" *ngFor="let path of paths; let i = index">
+        <div class="path-card-head">
+            <span class="path-card-title">Path #{{ paths.length - i }}</span>
+            <div class="d-flex gap-1">
+                <button type="button" class="btn btn-sm btn-light" (click)="print(path)" title="Print">
+                    <i class="fe fe-printer"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-light" (click)="edit(path)" title="Edit"
+                    *hasPermission="PermissionCode.EDIT_SUBDEVICE">
+                    <i class="fe fe-edit"></i>
+                </button>
+                <button type="button" class="btn btn-sm btn-light text-danger" (click)="delete(path)" title="Delete"
+                    *hasPermission="PermissionCode.DELETE_SUBDEVICE">
+                    <i class="fe fe-trash-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="path-layout">
+            <table class="path-table is-from">
+                <thead>
+                    <tr><th>Connected From</th><th>Slot</th><th>Port</th></tr>
+                </thead>
+                <tbody>
+                    <tr [class.is-current]="isCurrent(path.from)">
+                        <td>
+                            <div class="fw-semibold">{{ path.from?.device_name || '—' }}</div>
+                            <div class="text-muted small">{{ typeLabel(path.from) }}</div>
+                        </td>
+                        <td class="mono">{{ path.from?.slot || '—' }}</td>
+                        <td class="mono">{{ path.from?.port || '—' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="path-table is-odf">
+                <thead>
+                    <tr><th class="text-center">Order</th><th>ODF Name</th><th>ODF Slot</th><th>ODF Port</th></tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let odf of path.odfs" [class.is-current]="isCurrent(odf.endpoint)">
+                        <td class="text-center text-muted">{{ odf.order }}</td>
+                        <td class="fw-semibold">{{ odf.endpoint?.device_name || '—' }}</td>
+                        <td class="mono">{{ odf.endpoint?.slot || '—' }}</td>
+                        <td class="mono">{{ odf.endpoint?.port || '—' }}</td>
+                    </tr>
+                    <tr *ngIf="!path.odfs?.length">
+                        <td colspan="4" class="text-center text-muted">Direct link — no ODF</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="path-table is-to">
+                <thead>
+                    <tr><th>Connected To</th><th>Slot</th><th>Port</th></tr>
+                </thead>
+                <tbody>
+                    <tr [class.is-current]="isCurrent(path.to)">
+                        <td>
+                            <div class="fw-semibold">{{ path.to?.device_name || '—' }}</div>
+                            <div class="text-muted small">{{ typeLabel(path.to) }}</div>
+                        </td>
+                        <td class="mono">{{ path.to?.slot || '—' }}</td>
+                        <td class="mono">{{ path.to?.port || '—' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer p-3">
+    <button type="button" class="btn btn-sm btn-light" (click)="activeModal.dismiss()">
+        <i class="fe fe-x me-3"></i>Close
+    </button>
+</div>
