@@ -89,7 +89,7 @@
 
             <!-- loading -->
             <tbody *ngIf="(httpService.getLoading('subDevicesList') | async)">
-                <tr *ngFor="let number of [].constructor(10)">
+                <tr *ngFor="let number of [].constructor(20)">
                     <td style="padding: 19.9px;" *ngFor="let number of [].constructor(+11)">
                         <ngx-skeleton-loader appearance="line" animation="progress-dark"
                             [theme]="{width:'70%',height:'23.5px','border-radius':'3px','margin':'0'}"></ngx-skeleton-loader>

@@ -56,11 +56,11 @@
                 <tbody>
                     <tr [class.is-current]="isCurrent(path.from)">
                         <td>
-                            <div class="fw-semibold">{{ path.from?.device_name || '—' }}</div>
+                            <div class="fw-semibold">{{ path.from.device_name || '—' }}</div>
                             <div class="text-muted small">{{ typeLabel(path.from) }}</div>
                         </td>
-                        <td class="mono">{{ path.from?.slot || '—' }}</td>
-                        <td class="mono">{{ path.from?.port || '—' }}</td>
+                        <td class="mono">{{ path.from.slot || '—' }}</td>
+                        <td class="mono">{{ path.from.port || '—' }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -72,11 +72,11 @@
                 <tbody>
                     <tr *ngFor="let odf of path.odfs" [class.is-current]="isCurrent(odf.endpoint)">
                         <td class="text-center text-muted">{{ odf.order }}</td>
-                        <td class="fw-semibold">{{ odf.endpoint?.device_name || '—' }}</td>
-                        <td class="mono">{{ odf.endpoint?.slot || '—' }}</td>
-                        <td class="mono">{{ odf.endpoint?.port || '—' }}</td>
+                        <td class="fw-semibold">{{ odf.endpoint.device_name || '—' }}</td>
+                        <td class="mono">{{ odf.endpoint.slot || '—' }}</td>
+                        <td class="mono">{{ odf.endpoint.port || '—' }}</td>
                     </tr>
-                    <tr *ngIf="!path.odfs?.length">
+                    <tr *ngIf="!path.odfs.length">
                         <td colspan="4" class="text-center text-muted">Direct link — no ODF</td>
                     </tr>
                 </tbody>
@@ -89,11 +89,11 @@
                 <tbody>
                     <tr [class.is-current]="isCurrent(path.to)">
                         <td>
-                            <div class="fw-semibold">{{ path.to?.device_name || '—' }}</div>
+                            <div class="fw-semibold">{{ path.to.device_name || '—' }}</div>
                             <div class="text-muted small">{{ typeLabel(path.to) }}</div>
                         </td>
-                        <td class="mono">{{ path.to?.slot || '—' }}</td>
-                        <td class="mono">{{ path.to?.port || '—' }}</td>
+                        <td class="mono">{{ path.to.slot || '—' }}</td>
+                        <td class="mono">{{ path.to.port || '—' }}</td>
                     </tr>
                 </tbody>
             </table>
